@@ -240,6 +240,11 @@ public abstract class PlusBaseActivity extends Activity
         updateConnectButtonState();
         setProgressBarVisible(false);
         onPlusClientSignIn();
+        Intent startprofile = new Intent(this, Profile.class);
+        Bundle userInfo = new Bundle();
+        userInfo.putString("USER_NAME", getPlusClient().getAccountName());
+        startprofile.putExtras(userInfo);
+        startActivity(startprofile);
     }
 
     /**
