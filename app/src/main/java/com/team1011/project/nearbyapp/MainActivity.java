@@ -1,11 +1,15 @@
 package com.team1011.project.nearbyapp;
 
 import android.app.ActionBar;
-import android.app.Activity;
-import android.app.FragmentManager;
+import android.support.v4.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 
     public static String KEY_STATE_TITLE = "state_title";
 
@@ -24,11 +28,18 @@ public class MainActivity extends Activity {
 
     // Drawer stuff
     private static CharSequence mDrawerTitle;
-    private static String[] mDrawerTextList;
+    private static String[] mDrawerTitles;
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
+
+    // Pager/tabs stuff
+    private static String[] mTabsTitles;
+    private static int[] mTabsIcons;
+
+    SectionsPagerAdapter mSectionsPagerAdapter;
+    ViewPager mViewPager;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -37,18 +48,39 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //>> Link variables
+        //>> Setup: variables
+        final ActionBar mActionBar = getActionBar();
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.categories_drawer);
 
-        //>> Setup: titles and texts
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+
+        //>> Setup: titles, texts and other arrays of data
         if (savedInstanceState != null) {
             setTitle(savedInstanceState.getCharSequence(KEY_STATE_TITLE));
         } else {
             setTitle(getTitle());
         }
+
         mDrawerTitle = getResources().getString(R.string.title_drawer);
-        mDrawerTextList = new String[] {"Employment", "Dating", "Buy/Sell"};
+        mDrawerTitles = new String[] {
+                 "Employment"
+                ,"Dating"
+                ,"Buy/Sell"
+        };
+
+        mTabsTitles = new String[] {
+                 "[Receive]"
+                ,"[Send]"
+                ,"Queue"
+        };
+        mTabsIcons = new int[] {
+                 R.drawable.ic_launcher
+                ,R.drawable.ic_launcher
+                ,R.drawable.ic_launcher
+        };
 
         //>> Setup: drawer toggle
         mDrawerToggle = new ActionBarDrawerToggle(
@@ -78,15 +110,38 @@ public class MainActivity extends Activity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         //>> Setup: drawer list
-        // Set the adapter for the list view (Fills the mDrawerList with mDrawerTextList)
+        // Set the adapter for the list view (Fills the mDrawerList with mDrawerTitles)
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.categories_list_item, mDrawerTextList));
+                R.layout.categories_list_item, mDrawerTitles));
 
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        //>> Setup: action bar
-        ActionBar mActionBar = getActionBar();
+        //>> Setup: view pager
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                // When swiping between different app sections, select the corresponding tab.
+                // We can also use ActionBar.Tab#select() to do this if we have a reference to the
+                // Tab.
+                mActionBar.setSelectedNavigationItem(position);
+            }
+        });
 
+        //>> Setup: Add tabs
+        // For each of the sections in the app, add a tab to the action bar.
+        for (int i = 0; i < mSectionsPagerAdapter.getCount(); ++i) {
+            // Create a tab with text corresponding to the page title defined by the adapter.
+            // Also specify this Activity object, which implements the TabListener interface, as the
+            // listener for when this tab is selected.
+            mActionBar.addTab(
+                    mActionBar.newTab()
+                            .setText(mSectionsPagerAdapter.getPageTitle(i))
+                            .setIcon(mSectionsPagerAdapter.getPageIcon(i))
+                            .setTabListener(this));
+        }
+
+        //>> Setup: action bar
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         mActionBar.setDisplayShowTitleEnabled(true);
 
@@ -157,6 +212,22 @@ public class MainActivity extends Activity {
         getActionBar().setTitle(mTitle);
     }
 
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+        // When the given tab is selected, switch to the corresponding page in the ViewPager.
+        mViewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -168,16 +239,49 @@ public class MainActivity extends Activity {
 
     /** Swaps fragments in the main content view */
     private void selectDrawerItem(int position) {
+        /*
         // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, PlaceholderFragment.newInstance(position))
+                .replace(R.id.content_frame, new PlaceholderFragment(position))
                 .commit();
+        */
 
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
-        setTitle(mDrawerTextList[position]);
+        setTitle(mDrawerTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int i) {
+            switch (i) {
+                default:
+                    return new PlaceholderFragment(i);
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mTabsTitles[position];
+        }
+
+        public int getPageIcon(int position) {
+            return mTabsIcons[position];
+        }
     }
 
 }
