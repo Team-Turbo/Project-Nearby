@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 
-    public static String KEY_STATE_TITLE = "state_title";
+    public static final String KEY_STATE_TITLE = "state_title";
 
     // Current action bar title
     private static CharSequence mTitle;
@@ -170,7 +170,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
         //>> Other
 
-        mActionBar.setSelectedNavigationItem(-1); // select the profile fragment
+        mSectionsPagerAdapter.setSpecialPage(mActionBar, SectionsPagerAdapter.SpecialPage.PROFILE);
     }
 
     @Override
@@ -288,19 +288,35 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     public static class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        enum SpecialPage {
+            NONE, PROFILE, NOTIFICATIONS, CHATS
+        }
+
+        public static SpecialPage currSpecPage = SpecialPage.NONE;
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
+        public void setSpecialPage(ActionBar ab, SpecialPage p) {
+            currSpecPage = p;
+            ab.setSelectedNavigationItem(0);
+        }
+
         @Override
         public Fragment getItem(int i) {
-            switch (i) {
-                case -1:
-                    return new Profile(userName, displayName, birthDay, imageUrl, aboutMe);
-                case 0:
-                    return new PlaceholderFragment(i);
-                default:
-                    return new PlaceholderFragment(i);
+            if (currSpecPage != SpecialPage.NONE) {
+                switch (currSpecPage) {
+                    case PROFILE:
+                        return new Profile(userName, displayName, birthDay, imageUrl, aboutMe);
+                    default:
+                        return new PlaceholderFragment(i);
+                }
+            } else {
+                switch (i) {
+                    default:
+                        return new PlaceholderFragment(i);
+                }
             }
         }
 
