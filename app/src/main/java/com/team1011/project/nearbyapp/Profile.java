@@ -5,14 +5,21 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.InputStream;
 
 
 public class Profile extends Activity
@@ -43,10 +50,25 @@ public class Profile extends Activity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         TextView nameTxt = (TextView) findViewById(R.id.nameTxt);
+        TextView fNameTxt = (TextView) findViewById(R.id.fName);
+        TextView bdayTxt = (TextView) findViewById(R.id.bDay);
+        ImageView profilePic = (ImageView) findViewById(R.id.profilePic);
+
+
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        String name = bundle.getString("USER_NAME");
-        nameTxt.setText(name);
+        String accountName = bundle.getString("USER_NAME");
+        String fName = bundle.getString("FIRST_NAME");
+        String bDay = bundle.getString("BIRTH_DAY");
+        String abtMe = bundle.getString("ABOUT_ME");
+        String imgUrl = bundle.getString("PROFILE_PIC");
+
+       imgUrl = imgUrl.substring(0, imgUrl.length() - 2) + 400;
+
+        fNameTxt.setText(fName);
+        bdayTxt.setText(abtMe);
+
+        new LoadProfileImage(profilePic).execute(imgUrl);
     }
 
     @Override
@@ -142,6 +164,35 @@ public class Profile extends Activity
             super.onAttach(activity);
             ((Profile) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
+        }
+    }
+
+
+    /**
+     * Background Async task to load user profile picture from url
+     * */
+    private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public LoadProfileImage(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
         }
     }
 
