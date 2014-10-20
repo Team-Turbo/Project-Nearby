@@ -170,7 +170,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
         //>> Other
 
-        mSectionsPagerAdapter.setSpecialPage(mActionBar, SectionsPagerAdapter.SpecialPage.PROFILE);
+
     }
 
     @Override
@@ -288,37 +288,17 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     public static class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        enum SpecialPage {
-            NONE, PROFILE, NOTIFICATIONS, CHATS
-        }
-
-        private static SpecialPage currSpecPage = SpecialPage.NONE;
-
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
-        public void setSpecialPage(ActionBar ab, SpecialPage p) {
-            currSpecPage = p;
-            ab.setSelectedNavigationItem(0);
-        }
-
         @Override
         public Fragment getItem(int i) {
-            if (currSpecPage != SpecialPage.NONE) {
-                SpecialPage sp = currSpecPage;
-                currSpecPage = SpecialPage.NONE;
-                switch (sp) {
-                    case PROFILE:
-                        return new Profile(userName, displayName, birthDay, imageUrl, aboutMe);
-                    default:
-                        return new PlaceholderFragment(i);
-                }
-            } else {
-                switch (i) {
-                    default:
-                        return new PlaceholderFragment(i);
-                }
+            switch (i) {
+                case 0:
+                    return new Profile(userName, displayName, birthDay, imageUrl, aboutMe);
+                default:
+                    return new PlaceholderFragment(i);
             }
         }
 

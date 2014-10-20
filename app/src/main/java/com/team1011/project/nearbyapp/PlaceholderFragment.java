@@ -29,8 +29,8 @@ public class PlaceholderFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_placeholder, container, false);
 
-        ((TextView) rootView.findViewById(R.id.section_label)).setText(
-                String.valueOf(getArguments().getInt(ARG_SECTION_NUMBER)));
+        ((TextView) rootView.findViewById(R.id.section_label)).setText("Section "
+                + String.valueOf(getArguments().getInt(ARG_SECTION_NUMBER)));
 
         return rootView;
     }

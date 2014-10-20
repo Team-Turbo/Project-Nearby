@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,7 @@ import java.io.InputStream;
 /**
  * Created by Filip on 2014-10-20.
  */
-public class Profile extends PlaceholderFragment {
+public class Profile extends Fragment {
 
     private String userName;
     private String displayName;
@@ -29,22 +30,14 @@ public class Profile extends PlaceholderFragment {
     private TextView txtBday;
     private static boolean imageLock = false;
 
-   public Profile() {
-
-   }
-
+    public Profile() {}
 
     public Profile(String usrName, String dispName, String bDay, String imgUrl, String abtMe) {
-
         userName = usrName;
         displayName = dispName;
         birthDay = bDay;
         imageUrl = imgUrl;
         aboutMe = abtMe;
-
-
-
-
     }
 
     @Override
