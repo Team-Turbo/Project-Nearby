@@ -292,7 +292,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             NONE, PROFILE, NOTIFICATIONS, CHATS
         }
 
-        public static SpecialPage currSpecPage = SpecialPage.NONE;
+        private static SpecialPage currSpecPage = SpecialPage.NONE;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -306,7 +306,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         @Override
         public Fragment getItem(int i) {
             if (currSpecPage != SpecialPage.NONE) {
-                switch (currSpecPage) {
+                SpecialPage sp = currSpecPage;
+                currSpecPage = SpecialPage.NONE;
+                switch (sp) {
                     case PROFILE:
                         return new Profile(userName, displayName, birthDay, imageUrl, aboutMe);
                     default:
