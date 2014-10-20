@@ -1,199 +1,28 @@
 package com.team1011.project.nearbyapp;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+/**
+ * Created by Filip on 2014-10-20.
+ */
+public class Profile extends PlaceholderFragment {
 
-import java.io.InputStream;
+    private String userName;
+    private String displayName;
+    private String birthDay;
+    private String imageUrl;
+    private String aboutMe;
+
+   public Profile() {
+       
+   }
 
 
-public class Profile extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+    public Profile(String usrName, String dispName, String bDay, String imgUrl, String abtMe) {
 
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
-
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
-    private CharSequence mTitle;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
-
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
-
-        TextView nameTxt = (TextView) findViewById(R.id.nameTxt);
-        TextView fNameTxt = (TextView) findViewById(R.id.fName);
-        TextView bdayTxt = (TextView) findViewById(R.id.bDay);
-        ImageView profilePic = (ImageView) findViewById(R.id.profilePic);
-
-
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        String accountName = bundle.getString("USER_NAME");
-        String fName = bundle.getString("FIRST_NAME");
-        String bDay = bundle.getString("BIRTH_DAY");
-        String abtMe = bundle.getString("ABOUT_ME");
-        String imgUrl = bundle.getString("PROFILE_PIC");
-
-       imgUrl = imgUrl.substring(0, imgUrl.length() - 2) + 400;
-
-        fNameTxt.setText(fName);
-        bdayTxt.setText(abtMe);
-
-        new LoadProfileImage(profilePic).execute(imgUrl);
-    }
-
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
-    }
-
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_section1);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-        }
-    }
-
-    public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.profile, menu);
-            restoreActionBar();
-            return true;
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
-            return rootView;
-        }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((Profile) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
-        }
-    }
-
-
-    /**
-     * Background Async task to load user profile picture from url
-     * */
-    private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public LoadProfileImage(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
+        userName = usrName;
+        displayName = dispName;
+        birthDay = bDay;
+        imageUrl = imgUrl;
+        aboutMe = abtMe;
     }
 
 }

@@ -26,7 +26,6 @@
         android:text="Logout"
         android:id="@+id/btnLogout"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/sign_in_button"
         android:onClick="onClickLogout" />
 
 

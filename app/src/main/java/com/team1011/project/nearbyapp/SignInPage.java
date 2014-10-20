@@ -92,9 +92,9 @@ public class SignInPage extends Activity implements GoogleApiClient.ConnectionCa
         mSignInClicked = false;
         //Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
 
-        Intent intent = new Intent(this, Profile.class);
+       Intent intent = new Intent(this, MainActivity.class);
 
-        bundle = new Bundle();
+       bundle = new Bundle();
 
        Plus.PeopleApi.loadVisible(mGoogleApiClient, null).setResultCallback(this);
 
@@ -110,7 +110,7 @@ public class SignInPage extends Activity implements GoogleApiClient.ConnectionCa
             startActivity(intent);
         }
         else
-            Toast.makeText(getApplicationContext(), "Cant get current person", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Cant get current person", Toast.LENGTH_SHORT).show();
 
     }
 

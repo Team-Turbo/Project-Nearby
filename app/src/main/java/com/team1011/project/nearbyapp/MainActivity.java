@@ -1,13 +1,14 @@
 package com.team1011.project.nearbyapp;
 
 import android.app.ActionBar;
-import android.support.v4.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -40,6 +41,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
+
+    private static String userName;
+    private static String displayName;
+    private static String birthDay;
+    private static String imageUrl;
+    private static String aboutMe;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -147,6 +154,18 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+
+        userName = bundle.getString("USER_NAME");
+        displayName = bundle.getString("FIRST_NAME");
+        birthDay = bundle.getString("BIRTH_DAY");
+        aboutMe = bundle.getString("ABOUT_ME");
+        imageUrl = bundle.getString("PROFILE_PIC");
+
+        imageUrl = imageUrl.substring(0, imageUrl.length() - 2) + 400;
+
     }
 
     @Override
@@ -264,6 +283,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         @Override
         public Fragment getItem(int i) {
             switch (i) {
+                case 0:
+                    return new Profile(userName, displayName, birthDay, imageUrl, aboutMe);
                 default:
                     return new PlaceholderFragment(i);
             }
