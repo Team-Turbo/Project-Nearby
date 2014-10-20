@@ -155,6 +155,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
 
+        //>> Bundle stuff
+
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
 
@@ -166,6 +168,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
         imageUrl = imageUrl.substring(0, imageUrl.length() - 2) + 400;
 
+        //>> Other
+
+        mActionBar.setSelectedNavigationItem(-1); // select the profile fragment
     }
 
     @Override
@@ -290,8 +295,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         @Override
         public Fragment getItem(int i) {
             switch (i) {
-                case 0:
+                case -1:
                     return new Profile(userName, displayName, birthDay, imageUrl, aboutMe);
+                case 0:
+                    return new PlaceholderFragment(i);
                 default:
                     return new PlaceholderFragment(i);
             }
