@@ -12,7 +12,7 @@ public class Profile extends PlaceholderFragment {
     private String aboutMe;
 
    public Profile() {
-       
+
    }
 
 

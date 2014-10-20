@@ -27,7 +27,7 @@ public class SignInPage extends Activity implements GoogleApiClient.ConnectionCa
     private static final int RC_SIGN_IN = 0;
 
     /* Client used to interact with Google APIs. */
-    private GoogleApiClient mGoogleApiClient;
+    private static GoogleApiClient mGoogleApiClient;
 
     /* A flag indicating that a PendingIntent is in progress and prevents
      * us from starting further intents.
@@ -47,9 +47,6 @@ public class SignInPage extends Activity implements GoogleApiClient.ConnectionCa
 
 
     private SignInButton mGoogleBtn;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,7 +178,7 @@ public class SignInPage extends Activity implements GoogleApiClient.ConnectionCa
     }
 
 
-    public GoogleApiClient getClient()
+    public static GoogleApiClient getClient()
     {
         return mGoogleApiClient;
     }
