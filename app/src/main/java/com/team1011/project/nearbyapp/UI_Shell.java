@@ -1,16 +1,11 @@
 package com.team1011.project.nearbyapp;
 
 import android.app.ActionBar;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,8 +20,8 @@ import android.widget.Toast;
  *
  * The app's UI shell. It's the activity that the fragments will live in.
  */
-public class UI_Shell extends FragmentActivity implements ActionBar.TabListener {
-
+public class UI_Shell extends FragmentActivity
+{
     public static final String KEY_STATE_TITLE = "state_title";
 
     // Current action bar title
@@ -40,13 +35,6 @@ public class UI_Shell extends FragmentActivity implements ActionBar.TabListener 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
 
-    // Pager/tabs stuff
-    private static String[] mTabsTitles;
-    private static int[] mTabsIcons;
-
-    SectionsPagerAdapter mSectionsPagerAdapter;
-    ViewPager mViewPager;
-
     private static String userName;
     private static String displayName;
     private static String birthDay;
@@ -58,16 +46,13 @@ public class UI_Shell extends FragmentActivity implements ActionBar.TabListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_ui_shell);
 
         //>> Setup: variables
         final ActionBar mActionBar = getActionBar();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.categories_drawer);
-
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.pager);
 
         //>> Setup: titles, texts and other arrays of data
         if (savedInstanceState != null) {
@@ -81,17 +66,6 @@ public class UI_Shell extends FragmentActivity implements ActionBar.TabListener 
                  "Employment"
                 ,"Dating"
                 ,"Buy/Sell"
-        };
-
-        mTabsTitles = new String[] {
-                 "[Receive]"
-                ,"[Send]"
-                ,"Queue"
-        };
-        mTabsIcons = new int[] {
-                 R.drawable.ic_launcher
-                ,R.drawable.ic_launcher
-                ,R.drawable.ic_launcher
         };
 
         //>> Setup: drawer toggle
@@ -128,31 +102,6 @@ public class UI_Shell extends FragmentActivity implements ActionBar.TabListener 
 
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        //>> Setup: view pager
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                // When swiping between different app sections, select the corresponding tab.
-                // We can also use ActionBar.Tab#select() to do this if we have a reference to the
-                // Tab.
-                mActionBar.setSelectedNavigationItem(position);
-            }
-        });
-
-        //>> Setup: Add tabs
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); ++i) {
-            // Create a tab with text corresponding to the page title defined by the adapter.
-            // Also specify this Activity object, which implements the TabListener interface, as the
-            // listener for when this tab is selected.
-            mActionBar.addTab(
-                    mActionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
-                            .setIcon(mSectionsPagerAdapter.getPageIcon(i))
-                            .setTabListener(this));
-        }
-
         //>> Setup: action bar
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         mActionBar.setDisplayShowTitleEnabled(true);
@@ -175,7 +124,9 @@ public class UI_Shell extends FragmentActivity implements ActionBar.TabListener 
 
         //>> Other
 
-
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, new CategoryPage())
+                .commit();
     }
 
     @Override
@@ -188,7 +139,6 @@ public class UI_Shell extends FragmentActivity implements ActionBar.TabListener 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -248,22 +198,6 @@ public class UI_Shell extends FragmentActivity implements ActionBar.TabListener 
         getActionBar().setTitle(mTitle);
     }
 
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-        // When the given tab is selected, switch to the corresponding page in the ViewPager.
-        mViewPager.setCurrentItem(tab.getPosition());
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-    }
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -288,38 +222,4 @@ public class UI_Shell extends FragmentActivity implements ActionBar.TabListener 
         setTitle(mDrawerTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public static class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int i) {
-            switch (i) {
-                case 0:
-                    return new Profile(userName, displayName, birthDay, imageUrl, aboutMe);
-                default:
-                    return new PlaceholderFragment(i);
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mTabsTitles[position];
-        }
-
-        public int getPageIcon(int position) {
-            return mTabsIcons[position];
-        }
-    }
-
 }
