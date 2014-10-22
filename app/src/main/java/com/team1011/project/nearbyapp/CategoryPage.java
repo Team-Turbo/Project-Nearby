@@ -1,7 +1,6 @@
 package com.team1011.project.nearbyapp;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,18 +28,18 @@ public class CategoryPage extends Fragment implements ActionBar.TabListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_category, container, false);
-
-        return rootView;
+        return inflater.inflate(R.layout.fragment_category, container, false);
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
         //>> Setup: variables
-        final ActionBar mActionBar = activity.getActionBar();
+        final ActionBar mActionBar = getActivity().getActionBar();
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity().getSupportFragmentManager());
-        mViewPager = (ViewPager) activity.findViewById(R.id.pager);
+        mViewPager = (ViewPager) getActivity().findViewById(R.id.pager);
 
         //>> Setup: titles, texts and other arrays of data
         mTabsTitles = new String[] {
