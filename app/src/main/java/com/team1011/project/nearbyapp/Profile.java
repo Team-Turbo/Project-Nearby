@@ -1,5 +1,6 @@
 package com.team1011.project.nearbyapp;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,7 +45,7 @@ public class Profile extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.profile, container, false);
+        final View rootView = inflater.inflate(R.layout.profile, container, false);
 
         txtAccountName = (TextView) rootView.findViewById(R.id.accountName);
         txtDisplayName = (TextView) rootView.findViewById(R.id.displayName);
@@ -54,10 +56,19 @@ public class Profile extends Fragment {
             //imageLock = true;
             new LoadProfileImage(imgProfilePic).execute(imageUrl);
         }
-
         txtAccountName.setText(userName);
         txtDisplayName.setText(displayName);
         txtBday.setText(birthDay);
+
+        rootView.findViewById(R.id.profileScreen).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) v.getContext()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                rootView.findViewById(R.id.aboutTxt).clearFocus();
+            }
+        });
 
         return rootView;
     }
