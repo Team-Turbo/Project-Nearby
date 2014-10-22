@@ -20,7 +20,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
+/**
+ * Created by Melvin on 10/22/2014.
+ *
+ * The app's UI shell. It's the activity that the fragments will live in.
+ */
+public class UI_Shell extends FragmentActivity implements ActionBar.TabListener {
 
     public static final String KEY_STATE_TITLE = "state_title";
 

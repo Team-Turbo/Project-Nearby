@@ -89,7 +89,7 @@ public class SignInPage extends Activity implements GoogleApiClient.ConnectionCa
         mSignInClicked = false;
         //Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
 
-       Intent intent = new Intent(this, MainActivity.class);
+       Intent intent = new Intent(this, UI_Shell.class);
 
        bundle = new Bundle();
 
