@@ -16,6 +16,13 @@ public class BluetoothService extends Service {
     public BluetoothService() {
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
+        if (mBtAdapter.getScanMode() !=
+                BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
+            startActivity(discoverableIntent);
+        }
+
         new Thread(new Runnable() {
             public void run() {
                 for(;;) {
