@@ -171,6 +171,12 @@ public class UI_Shell extends FragmentActivity
                 Toast.makeText(this, "SETTINGS", Toast.LENGTH_SHORT).show();
                 return true;
 
+            case R.id.action_findPeers:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, new BluetoothFragment())
+                        .commit();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
