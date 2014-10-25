@@ -171,9 +171,17 @@ public class UI_Shell extends FragmentActivity
                 Toast.makeText(this, "SETTINGS", Toast.LENGTH_SHORT).show();
                 return true;
 
+            case R.id.action_profile:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame,
+                                new Profile(userName, displayName, birthDay, imageUrl, aboutMe))
+                        .commit();
+                return true;
+
             case R.id.action_findPeers:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content_frame, new BluetoothFragment())
+                        .replace(R.id.content_frame,
+                                new BluetoothFragment())
                         .commit();
                 return true;
 

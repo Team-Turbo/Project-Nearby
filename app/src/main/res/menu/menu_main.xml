@@ -2,6 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Main" >
 
+    <item android:id="@+id/action_profile"
+        android:title=""
+        android:icon="@drawable/ic_launcher"
+        android:showAsAction="ifRoom" />
+
     <item android:id="@+id/action_findPeers"
         android:title=""
         android:icon="@drawable/ic_launcher"
