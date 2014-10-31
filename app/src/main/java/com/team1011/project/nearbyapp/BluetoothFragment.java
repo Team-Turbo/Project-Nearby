@@ -30,6 +30,7 @@ public class BluetoothFragment extends Fragment {
 
     private ArrayAdapter<String> mNewDevicesArrayAdapter;
     private ListView listy;
+    private BluetoothAdapter mBtAdapter;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -60,21 +61,39 @@ public class BluetoothFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public BluetoothFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        if (mBtAdapter.getScanMode() !=
+                BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
+            startActivity(discoverableIntent);
+        }
+
+        listy = (ListView) (getActivity().findViewById(R.id.new_devices));
+
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         mNewDevicesArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.device_name);
-        listy = (ListView) (getActivity().findViewById(R.id.new_devices));
+
         listy.setAdapter(mNewDevicesArrayAdapter);
-        new BluetoothService().startService(new Intent());
+        mNewDevicesArrayAdapter.add("blah");
+
+        /*Intent blueToothIntent = new Intent(getActivity(), BluetoothService.class);
+    */
+        getActivity().startService(new Intent(getActivity(), BluetoothService.class));
 
         // Register for broadcasts when a device is discovered
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
@@ -83,6 +102,15 @@ public class BluetoothFragment extends Fragment {
         // Register for broadcasts when discovery has finished
         filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         getActivity().registerReceiver(mReceiver, filter);
+    }
+
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
     }
 
     @Override
@@ -102,25 +130,20 @@ public class BluetoothFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        //try {
-        //    mListener = (OnFragmentInteractionListener) activity;
-        //} catch (ClassCastException e) {
-        //    throw new ClassCastException(activity.toString()
-        //            + " must implement OnFragmentInteractionListener");
-        //}
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        //mListener = null;
+
     }
 
     @Override
     public void onDestroy() {
-
-        // Unregister broadcast listeners
         getActivity().unregisterReceiver(mReceiver);
+        // Unregister broadcast listeners
+        super.onDestroy();
+
     }
 
     /**

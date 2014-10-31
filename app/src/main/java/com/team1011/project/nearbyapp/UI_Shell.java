@@ -122,6 +122,7 @@ public class UI_Shell extends FragmentActivity
 
         imageUrl = imageUrl.substring(0, imageUrl.length() - 2) + 400;
 
+
         //>> Other
 
         getSupportFragmentManager().beginTransaction()
@@ -131,13 +132,13 @@ public class UI_Shell extends FragmentActivity
 
     @Override
     public void onBackPressed() {
-        SignInPage.getClient().disconnect();
 
         super.onBackPressed();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -186,6 +187,10 @@ public class UI_Shell extends FragmentActivity
                 return true;
 
             default:
+                /*getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame,
+                                new CategoryPage())
+                        .commit();*/
                 return super.onOptionsItemSelected(item);
         }
     }
@@ -223,13 +228,13 @@ public class UI_Shell extends FragmentActivity
 
     /** Swaps fragments in the main content view */
     private void selectDrawerItem(int position) {
-        /*
+
+
         // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, new PlaceholderFragment(position))
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, new CategoryPage())
                 .commit();
-        */
+
 
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);

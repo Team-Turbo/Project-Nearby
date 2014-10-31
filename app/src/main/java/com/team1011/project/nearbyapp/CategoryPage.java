@@ -18,9 +18,14 @@ import android.view.ViewGroup;
  */
 public class CategoryPage extends Fragment implements ActionBar.TabListener
 {
+    public static final boolean faltze = false;
+    public static final boolean datrooth = true;
+
     // Pager/tabs stuff
     private static String[] mTabsTitles;
     private static int[] mTabsIcons;
+    private boolean ranOnce = faltze;
+
 
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
@@ -35,47 +40,52 @@ public class CategoryPage extends Fragment implements ActionBar.TabListener
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
         //>> Setup: variables
         final ActionBar mActionBar = getActivity().getActionBar();
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity().getSupportFragmentManager());
         mViewPager = (ViewPager) getActivity().findViewById(R.id.pager);
 
-        //>> Setup: titles, texts and other arrays of data
-        mTabsTitles = new String[] {
-                "[Receive]"
-                ,"[Send]"
-                ,"Queue"
-        };
-        mTabsIcons = new int[] {
-                R.drawable.ic_launcher
-                ,R.drawable.ic_launcher
-                ,R.drawable.ic_launcher
-        };
+        if (ranOnce == faltze) {
+            ranOnce = datrooth;
+            //>> Setup: titles, texts and other arrays of data
+            mTabsTitles = new String[]{
+                    "[Receive]"
+                    , "[Send]"
+                    , "Queue"
+            };
+            mTabsIcons = new int[]{
+                    R.drawable.ic_launcher
+                    , R.drawable.ic_launcher
+                    , R.drawable.ic_launcher
+            };
 
-        //>> Setup: view pager
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                // When swiping between different app sections, select the corresponding tab.
-                // We can also use ActionBar.Tab#select() to do this if we have a reference to the
-                // Tab.
-                mActionBar.setSelectedNavigationItem(position);
+            //>> Setup: view pager
+            mViewPager.setAdapter(mSectionsPagerAdapter);
+            mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+                @Override
+                public void onPageSelected(int position) {
+                    // When swiping between different app sections, select the corresponding tab.
+                    // We can also use ActionBar.Tab#select() to do this if we have a reference to the
+                    // Tab.
+                    mActionBar.setSelectedNavigationItem(position);
+                }
+            });
+
+            //>> Setup: Add tabs
+            // For each of the sections in the app, add a tab to the action bar.
+            for (int i = 0; i < mSectionsPagerAdapter.getCount(); ++i) {
+                // Create a tab with text corresponding to the page title defined by the adapter.
+                // Also specify this Activity object, which implements the TabListener interface, as the
+                // listener for when this tab is selected.
+                mActionBar.addTab(
+                        mActionBar.newTab()
+                                .setText(mSectionsPagerAdapter.getPageTitle(i))
+                                .setIcon(mSectionsPagerAdapter.getPageIcon(i))
+                                .setTabListener(this));
             }
-        });
-
-        //>> Setup: Add tabs
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); ++i) {
-            // Create a tab with text corresponding to the page title defined by the adapter.
-            // Also specify this Activity object, which implements the TabListener interface, as the
-            // listener for when this tab is selected.
-            mActionBar.addTab(
-                    mActionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
-                            .setIcon(mSectionsPagerAdapter.getPageIcon(i))
-                            .setTabListener(this));
         }
     }
 
@@ -84,6 +94,15 @@ public class CategoryPage extends Fragment implements ActionBar.TabListener
         // When the given tab is selected, switch to the corresponding page in the ViewPager.
         mViewPager.setCurrentItem(tab.getPosition());
     }
+
+    @Override
+    public void onDetach() {
+        getActivity().getActionBar().removeAllTabs();
+        getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        super.onDetach();
+
+    }
+
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {}
     @Override
@@ -100,6 +119,9 @@ public class CategoryPage extends Fragment implements ActionBar.TabListener
         @Override
         public Fragment getItem(int i) {
             switch (i) {
+                case 0:
+                    return new BluetoothFragment();
+
                 default:
                     return new PlaceholderFragment(i);
             }

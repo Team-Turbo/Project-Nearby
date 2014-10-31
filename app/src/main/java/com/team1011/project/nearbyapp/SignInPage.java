@@ -44,7 +44,7 @@ public class SignInPage extends Activity implements GoogleApiClient.ConnectionCa
      */
     private ConnectionResult mConnectionResult;
 
-
+    private boolean ranOnce = false;
 
     private SignInButton mGoogleBtn;
 
@@ -52,6 +52,7 @@ public class SignInPage extends Activity implements GoogleApiClient.ConnectionCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in_page);
+
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -69,11 +70,14 @@ public class SignInPage extends Activity implements GoogleApiClient.ConnectionCa
                         && !mGoogleApiClient.isConnected()) {
                     mSignInClicked = true;
                     resolveSignInError();
+                    ranOnce = false;
                 }
                 else
                     Toast.makeText(getApplicationContext(), "Already connected", Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
 
     public void onClickLogout(View v) {
@@ -89,26 +93,53 @@ public class SignInPage extends Activity implements GoogleApiClient.ConnectionCa
         mSignInClicked = false;
         //Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
 
-       Intent intent = new Intent(this, UI_Shell.class);
+        if (!ranOnce) {
+            ranOnce = true;
+            Intent intent = new Intent(this, UI_Shell.class);
 
-       bundle = new Bundle();
+            bundle = new Bundle();
 
-       Plus.PeopleApi.loadVisible(mGoogleApiClient, null).setResultCallback(this);
+            Plus.PeopleApi.loadVisible(mGoogleApiClient, null).setResultCallback(this);
 
-        bundle.putString("USER_NAME", Plus.AccountApi.getAccountName(mGoogleApiClient));
+            bundle.putString("USER_NAME", Plus.AccountApi.getAccountName(mGoogleApiClient));
 
-        if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
-            bundle.putString("FIRST_NAME", Plus.PeopleApi.getCurrentPerson(mGoogleApiClient).getDisplayName());
-            bundle.putString("PROFILE_PIC", Plus.PeopleApi.getCurrentPerson(mGoogleApiClient).getImage().getUrl());
-            bundle.putString("BIRTH_DAY", Plus.PeopleApi.getCurrentPerson(mGoogleApiClient).getBirthday());
-            bundle.putString("ABOUT_ME", Plus.PeopleApi.getCurrentPerson(mGoogleApiClient).getAboutMe());
+            if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
+                bundle.putString("FIRST_NAME", Plus.PeopleApi.getCurrentPerson(mGoogleApiClient).getDisplayName());
+                bundle.putString("PROFILE_PIC", Plus.PeopleApi.getCurrentPerson(mGoogleApiClient).getImage().getUrl());
+                bundle.putString("BIRTH_DAY", Plus.PeopleApi.getCurrentPerson(mGoogleApiClient).getBirthday());
+                bundle.putString("ABOUT_ME", Plus.PeopleApi.getCurrentPerson(mGoogleApiClient).getAboutMe());
 
-            intent.putExtras(bundle);
-            startActivity(intent);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            } else
+                Toast.makeText(getApplicationContext(), "Cant get current person", Toast.LENGTH_SHORT).show();
+
         }
         else
-        Toast.makeText(getApplicationContext(), "Cant get current person", Toast.LENGTH_SHORT).show();
+        {
+            if (mGoogleApiClient.isConnected()) {
+                Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                mGoogleApiClient.disconnect();
+                mGoogleApiClient.connect();
+            }
+        }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
