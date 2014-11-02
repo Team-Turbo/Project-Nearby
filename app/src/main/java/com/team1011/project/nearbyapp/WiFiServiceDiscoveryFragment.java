@@ -67,6 +67,8 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
 
     private TextView statusTxtView;
 
+    private WiFiDirectServicesList.WiFiDevicesAdapter adapter;
+
 
     /**
      * Use this factory method to create a new instance of
@@ -98,19 +100,13 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        servicesList = new WiFiDirectServicesList();
-        getFragmentManager().beginTransaction()
-                .add(R.id.container_root, servicesList, "services").commit();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Fragment frag = getActivity().getSupportFragmentManager().findFragmentByTag("services");
-        if (frag != null) {
-            getActivity().getSupportFragmentManager().beginTransaction().remove(frag).commit();
-        }
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_wi_fi_service_discovery, container, false);
@@ -119,6 +115,10 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        servicesList = new WiFiDirectServicesList();
+        getFragmentManager().beginTransaction()
+                .add(R.id.container_root, servicesList, "services").commit();
 
         statusTxtView = (TextView) getActivity().findViewById(R.id.status_text);
 
@@ -152,12 +152,9 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
 
     @Override
     public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
-    @Override
-    public void onDestroy() {
+        mListener = null;
+
         if (manager != null && channel != null) {
             manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
 
@@ -172,7 +169,47 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
 
             });
         }
-        super.onDestroy();
+
+        super.onDetach();
+    }
+
+    @Override
+    public void onStart() {
+        
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        receiver = new WiFiDirectBroadcastReceiver(manager, channel, getActivity());
+        getActivity().registerReceiver(receiver, intentFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(receiver);
+    }
+
+    @Override
+    public void onStop() {
+        if (manager != null && channel != null) {
+            adapter.clear();
+            manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
+
+                @Override
+                public void onFailure(int reasonCode) {
+                    Log.d(TAG, "Disconnect failed. Reason :" + reasonCode);
+                }
+
+                @Override
+                public void onSuccess() {
+                }
+
+            });
+        }
+        super.onStop();
     }
 
     /**
@@ -227,7 +264,7 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
 
                             if (fragment != null) {
 
-                                WiFiDirectServicesList.WiFiDevicesAdapter adapter = ((WiFiDirectServicesList.WiFiDevicesAdapter) fragment
+                                adapter = ((WiFiDirectServicesList.WiFiDevicesAdapter) fragment
                                         .getListAdapter());
                                 WiFiP2pService service = new WiFiP2pService();
                                 service.device = srcDevice;

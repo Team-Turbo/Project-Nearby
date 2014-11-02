@@ -35,7 +35,7 @@ public class UI_Shell extends FragmentActivity
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
 
-    private static String userName;
+    public static String userName;
     private static String displayName;
     private static String birthDay;
     private static String imageUrl;
@@ -189,7 +189,7 @@ public class UI_Shell extends FragmentActivity
             case R.id.action_findPeers:
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame,
-                                new BluetoothFragment())
+                                new WiFiServiceDiscoveryFragment())
                         .commit();
                 return true;
 
