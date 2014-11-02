@@ -175,7 +175,7 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
 
     @Override
     public void onStart() {
-        
+
         super.onStart();
     }
 
@@ -268,7 +268,7 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
                                         .getListAdapter());
                                 WiFiP2pService service = new WiFiP2pService();
                                 service.device = srcDevice;
-                                service.instanceName = UI_Shell.userName;
+                                service.instanceName = instanceName;
                                 service.serviceRegistrationType = registrationType;
                                 adapter.add(service);
                                 adapter.notifyDataSetChanged();
