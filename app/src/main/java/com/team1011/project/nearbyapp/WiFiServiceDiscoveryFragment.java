@@ -49,7 +49,7 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
 
     // TXT RECORD properties
     public static final String TXTRECORD_PROP_AVAILABLE = "available";
-    public static final String SERVICE_INSTANCE = "_wifidemotest";
+    public static final String SERVICE_INSTANCE = "_nearbyapp";
     public static final String SERVICE_REG_TYPE = "_presence._tcp";
 
     public static final int MESSAGE_READ = 0x400 + 1;
@@ -221,7 +221,7 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
         record.put("listenport", String.valueOf(SERVER_PORT));
 
         WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
-                SERVICE_INSTANCE, SERVICE_REG_TYPE, record);
+               SERVICE_INSTANCE + UI_Shell.userName, SERVICE_REG_TYPE, record);
         manager.addLocalService(channel, service, new WifiP2pManager.ActionListener() {
 
             @Override
@@ -255,7 +255,7 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
 
                         // A service has been discovered. Is this our app?
 
-                        if (instanceName.equalsIgnoreCase(SERVICE_INSTANCE)) {
+                        if (instanceName.substring(0,SERVICE_INSTANCE.length()).equalsIgnoreCase(SERVICE_INSTANCE)) {
 
                             // update the UI and add the item the discovered
                             // device.
@@ -270,6 +270,7 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
                                 service.device = srcDevice;
                                 service.instanceName = instanceName;
                                 service.serviceRegistrationType = registrationType;
+
                                 adapter.add(service);
                                 adapter.notifyDataSetChanged();
                                 Log.d(TAG, "onBonjourServiceAvailable "

@@ -8,6 +8,7 @@ import android.net.wifi.p2p.WifiP2pDevice;
  */
 public class WiFiP2pService {
     WifiP2pDevice device;
-    String instanceName = UI_Shell.userName;
+    String instanceName = null;
     String serviceRegistrationType = null;
+    String data = null;
 }
