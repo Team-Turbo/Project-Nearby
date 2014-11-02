@@ -1,5 +1,6 @@
 package com.team1011.project.nearbyapp;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,7 +15,7 @@ public class PlaceholderFragment extends Fragment {
     public static final String ARG_SECTION_NUMBER = "section_number";
 
     public PlaceholderFragment() {
-        this(0);
+
     }
     public PlaceholderFragment(int sectionNumber) {
         Bundle args = new Bundle();
@@ -29,8 +30,12 @@ public class PlaceholderFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_placeholder, container, false);
 
-        ((TextView) rootView.findViewById(R.id.section_label)).setText("Section "
-                + String.valueOf(getArguments().getInt(ARG_SECTION_NUMBER)));
+        ((TextView) rootView.findViewById(R.id.section_label)).setText(
+                "Category: " + UI_Shell.getCurrentCategory()
+                + "\n" + "Section " + String.valueOf(getArguments().getInt(ARG_SECTION_NUMBER))
+        );
+
+        rootView.findViewById(R.id.placeholder_bg).setBackgroundColor(Color.rgb((int)(Math.random() * 225), (int)(Math.random() * 225), (int)(Math.random() * 225)));
 
         return rootView;
     }

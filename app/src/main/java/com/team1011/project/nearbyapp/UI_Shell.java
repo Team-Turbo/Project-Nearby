@@ -41,6 +41,16 @@ public class UI_Shell extends FragmentActivity
     private static String imageUrl;
     private static String aboutMe;
 
+    // For category pages
+
+    private static int currCategory = -1;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static String getCurrentCategory() {
+        return mDrawerTitles[currCategory];
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
@@ -103,14 +113,12 @@ public class UI_Shell extends FragmentActivity
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         //>> Setup: action bar
-        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         mActionBar.setDisplayShowTitleEnabled(true);
 
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
 
         //>> Bundle stuff
-
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
 
@@ -119,14 +127,13 @@ public class UI_Shell extends FragmentActivity
         birthDay = bundle.getString("BIRTH_DAY");
         aboutMe = bundle.getString("ABOUT_ME");
         imageUrl = bundle.getString("PROFILE_PIC");
-
         imageUrl = imageUrl.substring(0, imageUrl.length() - 2) + 400;
-
 
         //>> Other
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, new CategoryPage())
+                .replace(R.id.content_frame,
+                        new Profile(userName, displayName, birthDay, imageUrl, aboutMe))
                 .commit();
     }
 
@@ -187,10 +194,6 @@ public class UI_Shell extends FragmentActivity
                 return true;
 
             default:
-                /*getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content_frame,
-                                new CategoryPage())
-                        .commit();*/
                 return super.onOptionsItemSelected(item);
         }
     }
@@ -228,13 +231,12 @@ public class UI_Shell extends FragmentActivity
 
     /** Swaps fragments in the main content view */
     private void selectDrawerItem(int position) {
-
+        currCategory = position;
 
         // Insert the fragment by replacing any existing fragment
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, new CategoryPage())
+                .replace(R.id.content_frame, new Category_Shell())
                 .commit();
-
 
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
