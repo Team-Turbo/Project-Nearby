@@ -155,7 +155,7 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
     @Override
     public void onDetach() {
 
-        mListener = null;
+        /*mListener = null;
 
         if (manager != null && channel != null) {
             manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
@@ -170,7 +170,7 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
                 }
 
             });
-        }
+        }*/
 
         super.onDetach();
     }
@@ -197,7 +197,6 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
     @Override
     public void onStop() {
         if (manager != null && channel != null) {
-            adapter.clear();
             manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
 
                 @Override
@@ -254,10 +253,12 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
                     @Override
                     public void onDnsSdServiceAvailable(String instanceName,
                                                         String registrationType, WifiP2pDevice srcDevice) {
-
+                        if (instanceName.length() < SERVICE_INSTANCE.length())
+                            return;
                         // A service has been discovered. Is this our app?
 
-                        if (instanceName.substring(0,SERVICE_INSTANCE.length()+1).equalsIgnoreCase(SERVICE_INSTANCE)) {
+
+                        if (instanceName.substring(0,SERVICE_INSTANCE.length()).equalsIgnoreCase(SERVICE_INSTANCE)) {
 
                             // update the UI and add the item the discovered
                             // device.
