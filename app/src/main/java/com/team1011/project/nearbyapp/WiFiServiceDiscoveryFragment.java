@@ -130,7 +130,9 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
                 .addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
         manager = (WifiP2pManager) getActivity().getSystemService(Context.WIFI_P2P_SERVICE);
+
         channel = manager.initialize(getActivity(), getActivity().getMainLooper(), null);
+
         startRegistrationAndDiscovery();
 
         servicesList = new WiFiDirectServicesList();
@@ -255,7 +257,7 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
 
                         // A service has been discovered. Is this our app?
 
-                        if (instanceName.substring(0,SERVICE_INSTANCE.length()).equalsIgnoreCase(SERVICE_INSTANCE)) {
+                        if (instanceName.substring(0,SERVICE_INSTANCE.length()+1).equalsIgnoreCase(SERVICE_INSTANCE)) {
 
                             // update the UI and add the item the discovered
                             // device.
