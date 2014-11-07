@@ -38,7 +38,7 @@ public class MyService extends Service implements
 
     // TXT RECORD properties
     public static final String TXTRECORD_PROP_AVAILABLE = "available";
-    public static final String SERVICE_INSTANCE = "_nearbyapp" + UI_Shell.userName;
+    public static final String SERVICE_INSTANCE = "_nearbyapp";
     public static final String SERVICE_REG_TYPE = "_presence._tcp";
 
     public static final int MESSAGE_READ = 0x400 + 1;
@@ -60,6 +60,8 @@ public class MyService extends Service implements
 
     HashMap<String, String> records = new HashMap<String, String>();
 
+    static int count = 0;
+
 
 
     @Override
@@ -70,6 +72,8 @@ public class MyService extends Service implements
         // background priority so CPU-intensive work will not disrupt our UI.
         HandlerThread thread = new HandlerThread("ServiceStartArguments",
                 Process.THREAD_PRIORITY_BACKGROUND);
+
+        thread.setDaemon(true);
         thread.start();
 
         // Get the HandlerThread's Looper and use it for our Handler
@@ -125,7 +129,7 @@ public class MyService extends Service implements
             while (System.currentTimeMillis() < endTime) {
                 synchronized (this) {
                     try {
-                        Log.d("", "runnning service");
+                      //  Log.d("", "runnning service" + count++);
                        //wait(endTime - System.currentTimeMillis());
                     } catch (Exception e) {
                     }
@@ -170,7 +174,7 @@ public class MyService extends Service implements
         record.put(TXTRECORD_PROP_AVAILABLE, "visible");
 
         WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
-                SERVICE_INSTANCE, SERVICE_REG_TYPE, record);
+                SERVICE_INSTANCE + UI_Shell.userName, SERVICE_REG_TYPE, record);
         manager.addLocalService(channel, service, new WifiP2pManager.ActionListener() {
 
             @Override
@@ -206,7 +210,7 @@ public class MyService extends Service implements
 
                         // A service has been discovered. Is this our app?
 
-                        if (instanceName.substring(0,SERVICE_INSTANCE.length()).equalsIgnoreCase(SERVICE_INSTANCE) && UI_Shell.userName != null) {
+                        if (instanceName.substring(0, SERVICE_INSTANCE.length()).equalsIgnoreCase(SERVICE_INSTANCE)) {
 
                             // update the UI and add the item the discovered
                             // device.
