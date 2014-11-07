@@ -177,7 +177,10 @@ public class WiFiServiceDiscoveryFragment extends Fragment implements
 
     @Override
     public void onStart() {
-
+        Fragment frag = getActivity().getSupportFragmentManager().findFragmentByTag("services");
+        if (frag != null) {
+            getFragmentManager().beginTransaction().remove(frag).commit();
+        }
         super.onStart();
     }
 
