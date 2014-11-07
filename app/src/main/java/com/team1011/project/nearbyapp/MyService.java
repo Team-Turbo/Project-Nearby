@@ -1,5 +1,6 @@
 package com.team1011.project.nearbyapp;
 
+import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -36,7 +38,7 @@ public class MyService extends Service implements
 
     // TXT RECORD properties
     public static final String TXTRECORD_PROP_AVAILABLE = "available";
-    public static final String SERVICE_INSTANCE = "_nearbyapp";
+    public static final String SERVICE_INSTANCE = "_nearbyapp" + UI_Shell.userName;
     public static final String SERVICE_REG_TYPE = "_presence._tcp";
 
     public static final int MESSAGE_READ = 0x400 + 1;
@@ -55,6 +57,8 @@ public class MyService extends Service implements
     private TextView statusTxtView;
 
     private WiFiDirectServicesList.WiFiDevicesAdapter adapter;
+
+    HashMap<String, String> records = new HashMap<String, String>();
 
 
 
@@ -121,7 +125,8 @@ public class MyService extends Service implements
             while (System.currentTimeMillis() < endTime) {
                 synchronized (this) {
                     try {
-                        wait(endTime - System.currentTimeMillis());
+                        Log.d("", "runnning service");
+                       //wait(endTime - System.currentTimeMillis());
                     } catch (Exception e) {
                     }
                 }
@@ -201,7 +206,7 @@ public class MyService extends Service implements
 
                         // A service has been discovered. Is this our app?
 
-                        if (instanceName.substring(0,SERVICE_INSTANCE.length()).equalsIgnoreCase(SERVICE_INSTANCE)) {
+                        if (instanceName.substring(0,SERVICE_INSTANCE.length()).equalsIgnoreCase(SERVICE_INSTANCE) && UI_Shell.userName != null) {
 
                             // update the UI and add the item the discovered
                             // device.
@@ -210,8 +215,12 @@ public class MyService extends Service implements
                             service.device = srcDevice;
                             service.instanceName = instanceName;
                             service.serviceRegistrationType = registrationType;
+
+                            records.put(srcDevice.deviceAddress, instanceName);
                           //  adapter.add(service);
-                            Log.d("", service.device + " " + service.instanceName);
+                            Log.d("DEVICE_ADDRESS ", records.toString() + "" );
+                           // Log.d("INSTANCE_NAME ", service.instanceName);
+
                            // adapter.notifyDataSetChanged();
                             Log.d(TAG, "onBonjourServiceAvailable "
                                     + instanceName);
@@ -268,8 +277,26 @@ public class MyService extends Service implements
 
 
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Broadcasting Disabled", Toast.LENGTH_SHORT).show();
+        if (manager != null && channel != null) {
+            manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
+
+                @Override
+                public void onFailure(int reasonCode) {
+                    Log.d(TAG, "Disconnect failed. Reason :" + reasonCode);
+                }
+
+                @Override
+                public void onSuccess() {
+                }
+
+            });
+        }
+
+        mServiceLooper.quitSafely();
+        super.onDestroy();
     }
 }

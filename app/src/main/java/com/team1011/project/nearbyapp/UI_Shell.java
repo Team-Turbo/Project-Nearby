@@ -1,8 +1,10 @@
 package com.team1011.project.nearbyapp;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
@@ -177,6 +179,12 @@ public class UI_Shell extends FragmentActivity
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Toast.makeText(this, "SETTINGS", Toast.LENGTH_SHORT).show();
+
+                return true;
+            case R.id.stopBroadcast:
+                Intent stopintent = new Intent(this, MyService.class);
+                stopService(stopintent);
+
                 return true;
 
             case R.id.action_profile:
@@ -192,11 +200,17 @@ public class UI_Shell extends FragmentActivity
                            //     new WiFiServiceDiscoveryFragment())
                         //.commit();
 
+
                 Intent intent = new Intent(this, MyService.class);
 
                 startService(intent);
                 return true;
+            case R.id.resetWifi:
+                WifiManager wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
+                wifiManager.setWifiEnabled(false);
 
+                wifiManager.setWifiEnabled(true);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

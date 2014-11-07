@@ -17,4 +17,14 @@
         android:orderInCategory="100"
         android:showAsAction="never" />
 
+    <item android:id="@+id/stopBroadcast"
+        android:title="Disable Broadcast"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+
+    <item android:id="@+id/resetWifi"
+        android:title="Reset Wi-Fi"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+
 </menu>
