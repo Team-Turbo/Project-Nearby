@@ -160,6 +160,12 @@ public class UI_Shell extends FragmentActivity
     }
 
     @Override
+    public void onDestroy() {
+
+        super.onDestroy();
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);

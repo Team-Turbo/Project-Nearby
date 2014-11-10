@@ -83,7 +83,7 @@ public class MyService extends Service implements
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "Sservice started", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
 
         servicesList = new WiFiDirectServicesList();
 
