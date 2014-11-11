@@ -206,7 +206,6 @@ public class UI_Shell extends FragmentActivity
                            //     new WiFiServiceDiscoveryFragment())
                         //.commit();
 
-
                 Intent intent = new Intent(this, MyService.class);
 
                 startService(intent);

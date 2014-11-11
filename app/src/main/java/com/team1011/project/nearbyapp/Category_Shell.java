@@ -5,7 +5,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,9 +26,8 @@ public class Category_Shell extends Fragment
     // Pager/tabs stuff
     private static String[] mTabsTitles;
     private static int[] mTabsIcons;
-    private boolean ranOnce = faltze;
 
-    SectionsPagerAdapter mSectionsPagerAdapter;
+    SectionsPagerAdapter mPagerAdapter;
     ViewPager mViewPager;
 
     @Override
@@ -44,23 +43,21 @@ public class Category_Shell extends Fragment
         //>> Setup: variables
         mActionBar = getActivity().getActionBar();
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity().getSupportFragmentManager());
+        mPagerAdapter = new SectionsPagerAdapter(getActivity().getSupportFragmentManager());
         mViewPager = (ViewPager) getActivity().findViewById(R.id.pager);
 
         //>> Setup: titles, texts and other arrays of data
-        mTabsTitles = new String[]{
+        mTabsTitles = new String[] {
                   "[Receive]"
                 , "[Send]"
-                , "Queue"
         };
-        mTabsIcons = new int[]{
+        mTabsIcons = new int[] {
                   R.drawable.ic_launcher
-                , R.drawable.ic_launcher
                 , R.drawable.ic_launcher
         };
 
         //>> Setup: view pager
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -70,7 +67,6 @@ public class Category_Shell extends Fragment
                 mActionBar.setSelectedNavigationItem(position);
             }
         });
-        //mViewPager.setOffscreenPageLimit(mSectionsPagerAdapter.getCount() - 1);
 
         //>> Setup: Tabs
         // Make a listener for the tabs
@@ -88,7 +84,7 @@ public class Category_Shell extends Fragment
 
             @Override
             public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
+                mViewPager.setCurrentItem(tab.getPosition());
             }
         };
 
@@ -96,29 +92,29 @@ public class Category_Shell extends Fragment
         mActionBar.removeAllTabs();
 
         // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); ++i) {
+        for (int i = 0; i < mPagerAdapter.getCount(); ++i) {
             // Create a tab with text corresponding to the page title defined by the adapter.
             // Also specify this Activity object, which implements the TabListener interface, as the
             // listener for when this tab is selected.
             mActionBar.addTab(
                     mActionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
-                            .setIcon(mSectionsPagerAdapter.getPageIcon(i))
+                            .setText(mPagerAdapter.getPageTitle(i))
+                            .setIcon(mPagerAdapter.getPageIcon(i))
                             .setTabListener(tabListener));
         }
     }
 
     @Override
     public void onDetach() {
+        super.onDetach();
+
         mActionBar.removeAllTabs();
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-
-        super.onDetach();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public static class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -126,15 +122,12 @@ public class Category_Shell extends Fragment
 
         @Override
         public Fragment getItem(int i) {
-            switch (i) {
-                default:
-                    return new PlaceholderFragment(i);
-            }
+            return new PlaceholderFragment(i);
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return mTabsTitles.length;
         }
 
         @Override
