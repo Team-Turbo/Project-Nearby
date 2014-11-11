@@ -83,7 +83,7 @@ public class MyService extends Service implements
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Broadcasting started", Toast.LENGTH_SHORT).show();
 
         servicesList = new WiFiDirectServicesList();
 
@@ -284,7 +284,7 @@ public class MyService extends Service implements
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "Broadcasting Disabled", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Broadcasting stopped", Toast.LENGTH_SHORT).show();
         if (manager != null && channel != null) {
             manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
 
