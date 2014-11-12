@@ -181,15 +181,14 @@ public class MyService extends Service implements
     private void startRegistrationAndDiscovery() {
         Map<String, String> record = new HashMap<String, String>();
 
-       record.put(TXTRECORD_PROP_AVAILABLE, "visible");
+       //record.put(TXTRECORD_PROP_AVAILABLE, "visible");
 
-       int halfRegId = UI_Shell.myRegID.length()/2;
 
-       record.put("REG_ID1", UI_Shell.myRegID.substring(0, halfRegId));
-
-       record.put("REG_ID2", UI_Shell.myRegID.substring(halfRegId));
+       record.put("RID", rID);
 
        Log.d("RECORD", record.toString());
+
+
 
 
         final WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
@@ -265,15 +264,19 @@ public class MyService extends Service implements
                             String fullDomainName, Map<String, String> record,
                             WifiP2pDevice device) {
 
-                       // if (record.containsKey("REG_ID") ) {
-                           Log.d(TAG,
-                                   device.deviceName + " is "
-                                          + record.get(TXTRECORD_PROP_AVAILABLE));
+                       if (record.containsKey("RID")  && record.get("RID")!= null) {
+                          // Log.d(TAG,
+                                  // device.deviceName + " is "
+                                        //  + record.get(TXTRECORD_PROP_AVAILABLE));
 
-                           Log.d("FOUND REGISTRATION ID", record.get("REG_ID1") + record.get("REG_ID2"));
 
-                            UI_Shell.gcm.sendMessage(UI_Shell.userName, record.get("REG_ID1") + record.get("REG_ID2"));
-                       // }
+                        Log.d("DOMAIN NAME", fullDomainName);
+
+
+                           Log.d("FOUND REGISTRATION ID", record.get("RID"));
+
+                            UI_Shell.gcm.sendMessage(UI_Shell.userName, record.get("RID"));
+                       }
                     }
                 });
 
