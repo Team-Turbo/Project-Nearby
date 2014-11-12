@@ -32,7 +32,8 @@ public class GcmIntentService extends IntentService {
              * recognize.
              */
             messages.add(extras.toString());
-            Log.d("GCM", messages.get(0));
+            for (int i = 0; i< messages.size(); i++)
+                Log.d("GCM Message received", messages.get(i));
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.
         GcmBroadcastReceiver.completeWakefulIntent(intent);
