@@ -20,7 +20,7 @@ import java.io.IOException;
 public class GCMObject {
 
     GoogleCloudMessaging gcm;
-    public static final String SEND_ID = "919944179472";
+    public static final String SEND_ID = "291560809451";
     String registrationID = "";
 
     //GcmBroadcastReceiver incoming;
@@ -78,17 +78,17 @@ public class GCMObject {
     }
 
     public void sendMessage(final String data, final String regId){
-        new AsyncTask(){
+        new AsyncTask<Object, Integer, String>(){
 
             @Override
-            protected Object doInBackground(Object[] objects) {
+            protected String doInBackground(Object[] objects) {
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost httpPost = new HttpPost("https://android.googleapis.com/gcm/send");
                 HttpResponse response;
 
                 try {
                     httpPost.addHeader(new BasicHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8 "));
-                    httpPost.addHeader(new BasicHeader("Authorization", "key=AIzaSyCm2BOndmO5APiW2ywuO1jEbA4pnIxOWTg"));
+                    httpPost.addHeader(new BasicHeader("Authorization", "key=AIzaSyCJsDphSiFKz42BWOC580RoMEpQ0AeIdkU"));
 
                     String outGoing = "data.text=" + data + "&registration_id=" + regId;
                     StringEntity se = new StringEntity(outGoing);
@@ -96,6 +96,8 @@ public class GCMObject {
                     httpPost.setEntity(se);
 
                     response = httpClient.execute(httpPost);
+
+                    Log.d("Sending To", regId);
 
                     Log.d("info", "Response : " + response.toString());
                     Log.d("info", "Response : " + response.getStatusLine().toString());
