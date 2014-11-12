@@ -45,6 +45,7 @@ public class UI_Shell extends FragmentActivity
 
     protected static String myRegID;
 
+
     protected static GCMObject gcm;
 
     // For category pages
@@ -217,6 +218,11 @@ public class UI_Shell extends FragmentActivity
                         //.commit();
 
                 Intent intent = new Intent(this, MyService.class);
+                Bundle bundle = new Bundle();
+
+                bundle.putString("REG_ID", myRegID);
+
+                intent.putExtras(bundle);
 
                 startService(intent);
                 return true;

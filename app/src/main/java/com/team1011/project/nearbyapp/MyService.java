@@ -12,6 +12,7 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -62,6 +63,7 @@ public class MyService extends Service implements
 
     static int count = 0;
 
+    private String rID;
 
 
     @Override
@@ -84,6 +86,10 @@ public class MyService extends Service implements
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "Broadcasting started", Toast.LENGTH_SHORT).show();
+
+        Bundle bundle = intent.getExtras();
+
+        rID = bundle.getString("REG_ID");
 
         servicesList = new WiFiDirectServicesList();
 
@@ -172,10 +178,14 @@ public class MyService extends Service implements
     private void startRegistrationAndDiscovery() {
         Map<String, String> record = new HashMap<String, String>();
         record.put(TXTRECORD_PROP_AVAILABLE, "visible");
+        record.put("REG_ID", rID);
 
-        if (UI_Shell.myRegID != null) {
-            WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
-                    SERVICE_INSTANCE + UI_Shell.myRegID, SERVICE_REG_TYPE, record);
+        if (UI_Shell.myRegID != null && UI_Shell.gcm != null ) {
+
+
+            final WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
+                    SERVICE_INSTANCE, SERVICE_REG_TYPE, record);
+
 
             manager.addLocalService(channel, service, new WifiP2pManager.ActionListener() {
 
@@ -187,11 +197,13 @@ public class MyService extends Service implements
                 @Override
                 public void onFailure(int error) {
                     Log.d("", "Failed to add a service");
+                    Log.d("Error Code", "" + error);
                 }
             });
-        }
 
-        discoverService();
+
+            discoverService();
+        }
 
     }
 
@@ -231,9 +243,7 @@ public class MyService extends Service implements
                            // adapter.notifyDataSetChanged();
 
 
-                            Log.d("FOUND REGISTRATION ID", instanceName.substring(SERVICE_INSTANCE.length()));
 
-                            UI_Shell.gcm.sendMessage(UI_Shell.userName, instanceName.substring(SERVICE_INSTANCE.length()));
 
                         }
 
@@ -251,6 +261,10 @@ public class MyService extends Service implements
                         Log.d(TAG,
                                 device.deviceName + " is "
                                         + record.get(TXTRECORD_PROP_AVAILABLE));
+
+                        Log.d("FOUND REGISTRATION ID",record.get("REG_ID"));
+
+                        UI_Shell.gcm.sendMessage(UI_Shell.userName, record.get("REG_ID"));
                     }
                 });
 
