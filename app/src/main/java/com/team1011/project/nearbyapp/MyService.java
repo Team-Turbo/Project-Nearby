@@ -178,32 +178,33 @@ public class MyService extends Service implements
     private void startRegistrationAndDiscovery() {
         Map<String, String> record = new HashMap<String, String>();
         record.put(TXTRECORD_PROP_AVAILABLE, "visible");
-        record.put("REG_ID", rID);
 
-        if (UI_Shell.myRegID != null && UI_Shell.gcm != null ) {
-
-
-            final WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
-                    SERVICE_INSTANCE, SERVICE_REG_TYPE, record);
+        record.put("REG_ID", UI_Shell.myRegID);
 
 
-            manager.addLocalService(channel, service, new WifiP2pManager.ActionListener() {
-
-                @Override
-                public void onSuccess() {
-                    Log.d("", "Added Local Service");
-                }
-
-                @Override
-                public void onFailure(int error) {
-                    Log.d("", "Failed to add a service");
-                    Log.d("Error Code", "" + error);
-                }
-            });
 
 
-            discoverService();
-        }
+        final WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
+                SERVICE_INSTANCE, SERVICE_REG_TYPE, record);
+
+
+        manager.addLocalService(channel, service, new WifiP2pManager.ActionListener() {
+
+            @Override
+            public void onSuccess() {
+                Log.d("", "Added Local Service");
+            }
+
+            @Override
+            public void onFailure(int error) {
+                Log.d("", "Failed to add a service");
+                Log.d("Error Code", "" + error);
+            }
+        });
+
+
+        discoverService();
+
 
     }
 
@@ -225,7 +226,7 @@ public class MyService extends Service implements
 
                         // A service has been discovered. Is this our app?
 
-                        if (instanceName.substring(0, SERVICE_INSTANCE.length()).equalsIgnoreCase(SERVICE_INSTANCE)) {
+                        if (instanceName.equalsIgnoreCase(SERVICE_INSTANCE)) {
 
                             // update the UI and add the item the discovered
                             // device.
@@ -259,7 +260,7 @@ public class MyService extends Service implements
                             String fullDomainName, Map<String, String> record,
                             WifiP2pDevice device) {
 
-                        if (record.containsKey("REG_ID") && record.get("REG_ID") != null) {
+                        if (record.containsKey("REG_ID") ) {
                             Log.d(TAG,
                                     device.deviceName + " is "
                                             + record.get(TXTRECORD_PROP_AVAILABLE));
