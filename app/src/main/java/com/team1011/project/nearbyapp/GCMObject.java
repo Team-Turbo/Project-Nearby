@@ -20,7 +20,7 @@ import java.io.IOException;
 public class GCMObject {
 
     GoogleCloudMessaging gcm;
-    public static final String SEND_ID = "291560809451";
+    public static final String SEND_ID = "919944179472";
     String registrationID = "";
 
     //GcmBroadcastReceiver incoming;
@@ -88,7 +88,7 @@ public class GCMObject {
 
                 try {
                     httpPost.addHeader(new BasicHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8 "));
-                    httpPost.addHeader(new BasicHeader("Authorization", "key=AIzaSyCJsDphSiFKz42BWOC580RoMEpQ0AeIdkU"));
+                    httpPost.addHeader(new BasicHeader("Authorization", "key=AIzaSyCm2BOndmO5APiW2ywuO1jEbA4pnIxOWTg"));
 
                     String outGoing = "data.text=" + data + "&registration_id=" + regId;
                     StringEntity se = new StringEntity(outGoing);
