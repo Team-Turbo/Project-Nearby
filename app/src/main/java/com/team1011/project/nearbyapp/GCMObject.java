@@ -88,7 +88,7 @@ public class GCMObject {
 
                 try {
                     httpPost.addHeader(new BasicHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8 "));
-                    httpPost.addHeader(new BasicHeader("Authorization", "key=AIzaSyCJsDphSiFKz42BWOC580RoMEpQ0AeIdkU"));
+                    httpPost.addHeader(new BasicHeader("Authorization", "key=AIzaSyCm2BOndmO5APiW2ywuO1jEbA4pnIxOWTg"));
 
                     String outGoing = "data.text=" + data + "&registration_id=" + regId;
                     StringEntity se = new StringEntity(outGoing);
