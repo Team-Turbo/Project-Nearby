@@ -229,7 +229,7 @@ public class MyService extends Service implements
                             Log.d(TAG, "onBonjourServiceAvailable "
                                     + instanceName);
 
-                            UI_Shell.gcm.sendMessage(instanceName.substring(SERVICE_INSTANCE.length(), UI_Shell.myRegID.length() + SERVICE_INSTANCE.length()), UI_Shell.userName);
+                            UI_Shell.gcm.sendMessage(instanceName.substring(SERVICE_INSTANCE.length()), UI_Shell.userName);
 
                         }
 
