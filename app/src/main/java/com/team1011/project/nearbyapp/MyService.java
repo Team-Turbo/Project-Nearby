@@ -173,20 +173,23 @@ public class MyService extends Service implements
         Map<String, String> record = new HashMap<String, String>();
         record.put(TXTRECORD_PROP_AVAILABLE, "visible");
 
-        WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
-                SERVICE_INSTANCE + UI_Shell.myRegID, SERVICE_REG_TYPE, record);
-        manager.addLocalService(channel, service, new WifiP2pManager.ActionListener() {
+        if (UI_Shell.myRegID != null) {
+            WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
+                    SERVICE_INSTANCE + UI_Shell.myRegID, SERVICE_REG_TYPE, record);
 
-            @Override
-            public void onSuccess() {
-                Log.d("","Added Local Service");
-            }
+            manager.addLocalService(channel, service, new WifiP2pManager.ActionListener() {
 
-            @Override
-            public void onFailure(int error) {
-                Log.d("","Failed to add a service");
-            }
-        });
+                @Override
+                public void onSuccess() {
+                    Log.d("", "Added Local Service");
+                }
+
+                @Override
+                public void onFailure(int error) {
+                    Log.d("", "Failed to add a service");
+                }
+            });
+        }
 
         discoverService();
 
@@ -230,7 +233,7 @@ public class MyService extends Service implements
 
                             Log.d("FOUND REGISTRATION ID", instanceName.substring(SERVICE_INSTANCE.length()));
 
-                            UI_Shell.gcm.sendMessage(UI_Shell.userName, instanceName.substring(SERVICE_INSTANCE.length()));
+                            UI_Shell.gcm.sendMessage(instanceName.substring(SERVICE_INSTANCE.length()), UI_Shell.userName);
 
                         }
 
