@@ -258,13 +258,16 @@ public class MyService extends Service implements
                     public void onDnsSdTxtRecordAvailable(
                             String fullDomainName, Map<String, String> record,
                             WifiP2pDevice device) {
-                        Log.d(TAG,
-                                device.deviceName + " is "
-                                        + record.get(TXTRECORD_PROP_AVAILABLE));
 
-                        Log.d("FOUND REGISTRATION ID",record.get("REG_ID"));
+                        if (record.containsKey("REG_ID") && record.get("REG_ID") != null) {
+                            Log.d(TAG,
+                                    device.deviceName + " is "
+                                            + record.get(TXTRECORD_PROP_AVAILABLE));
 
-                        UI_Shell.gcm.sendMessage(UI_Shell.userName, record.get("REG_ID"));
+                            Log.d("FOUND REGISTRATION ID", record.get("REG_ID"));
+
+                            UI_Shell.gcm.sendMessage(UI_Shell.userName, record.get("REG_ID"));
+                        }
                     }
                 });
 
