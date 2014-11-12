@@ -14,21 +14,20 @@ import android.view.ViewGroup;
 /**
  * Created by Melvin on 10/22/2014.
  *
- * The fragment that will deal with all of the categories.
+ * The shell fragment that houses category fragments.
  */
 public class Category_Shell extends Fragment
 {
-    public static final boolean faltze = false;
-    public static final boolean datrooth = true;
-
     private static ActionBar mActionBar;
 
     // Pager/tabs stuff
     private static String[] mTabsTitles;
     private static int[] mTabsIcons;
 
-    SectionsPagerAdapter mPagerAdapter;
-    ViewPager mViewPager;
+    private static SectionsPagerAdapter mPagerAdapter;
+    private static ViewPager mViewPager;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,7 +121,7 @@ public class Category_Shell extends Fragment
 
         @Override
         public Fragment getItem(int i) {
-            return new PlaceholderFragment(i);
+            return new CategoryFragment(i);
         }
 
         @Override
