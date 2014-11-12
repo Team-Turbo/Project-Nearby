@@ -174,7 +174,7 @@ public class MyService extends Service implements
         record.put(TXTRECORD_PROP_AVAILABLE, "visible");
 
         WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
-                SERVICE_INSTANCE + UI_Shell.userName, SERVICE_REG_TYPE, record);
+                SERVICE_INSTANCE + UI_Shell.myRegID, SERVICE_REG_TYPE, record);
         manager.addLocalService(channel, service, new WifiP2pManager.ActionListener() {
 
             @Override

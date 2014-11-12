@@ -43,6 +43,10 @@ public class UI_Shell extends FragmentActivity
     private static String imageUrl;
     private static String aboutMe;
 
+    protected static String myRegID;
+
+    public static GCMObject gcm;
+
     // For category pages
 
     private static int currCategory = -1;
@@ -55,6 +59,8 @@ public class UI_Shell extends FragmentActivity
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +71,10 @@ public class UI_Shell extends FragmentActivity
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.categories_drawer);
+
+        gcm = new GCMObject();
+
+        gcm.registerInBackground(getApplicationContext());
 
         //>> Setup: titles, texts and other arrays of data
         if (savedInstanceState != null) {
