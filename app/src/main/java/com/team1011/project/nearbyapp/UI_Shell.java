@@ -45,7 +45,7 @@ public class UI_Shell extends FragmentActivity
 
     protected static String myRegID;
 
-    public static GCMObject gcm;
+    protected static GCMObject gcm;
 
     // For category pages
 
