@@ -9,6 +9,9 @@ import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.WifiP2pManager.Channel;
+import android.net.wifi.p2p.WifiP2pManager.DnsSdServiceResponseListener;
+import android.net.wifi.p2p.WifiP2pManager.DnsSdTxtRecordListener;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
 import android.os.Build;
@@ -49,7 +52,7 @@ public class MyService extends Service implements
     static final int SERVER_PORT = 4546;
 
     private final IntentFilter intentFilter = new IntentFilter();
-    private WifiP2pManager.Channel channel;
+    private Channel channel;
     private BroadcastReceiver receiver = null;
     private WifiP2pDnsSdServiceRequest serviceRequest;
 
@@ -177,11 +180,16 @@ public class MyService extends Service implements
 
     private void startRegistrationAndDiscovery() {
         Map<String, String> record = new HashMap<String, String>();
-        record.put(TXTRECORD_PROP_AVAILABLE, "visible");
 
-        record.put("REG_ID", UI_Shell.myRegID);
+       record.put(TXTRECORD_PROP_AVAILABLE, "visible");
 
+       int halfRegId = UI_Shell.myRegID.length()/2;
 
+       record.put("REG_ID1", UI_Shell.myRegID.substring(0, halfRegId));
+
+       record.put("REG_ID2", UI_Shell.myRegID.substring(halfRegId));
+
+       Log.d("RECORD", record.toString());
 
 
         final WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
@@ -209,7 +217,6 @@ public class MyService extends Service implements
     }
 
 
-
     private void discoverService() {
 
         /*
@@ -218,7 +225,7 @@ public class MyService extends Service implements
          */
 
         manager.setDnsSdResponseListeners(channel,
-                new WifiP2pManager.DnsSdServiceResponseListener() {
+                new DnsSdServiceResponseListener() {
 
                     @Override
                     public void onDnsSdServiceAvailable(String instanceName,
@@ -242,14 +249,12 @@ public class MyService extends Service implements
                            // Log.d("INSTANCE_NAME ", service.instanceName);
 
                            // adapter.notifyDataSetChanged();
-
-
-
+                            Log.d(TAG, "onBonjourServiceAvailable "
+                                    + instanceName);
 
                         }
-
                     }
-                }, new WifiP2pManager.DnsSdTxtRecordListener() {
+                }, new DnsSdTxtRecordListener() {
 
                     /**
                      * A new TXT record is available. Pick up the advertised
@@ -260,15 +265,15 @@ public class MyService extends Service implements
                             String fullDomainName, Map<String, String> record,
                             WifiP2pDevice device) {
 
-                        if (record.containsKey("REG_ID") ) {
-                            Log.d(TAG,
-                                    device.deviceName + " is "
-                                            + record.get(TXTRECORD_PROP_AVAILABLE));
+                       // if (record.containsKey("REG_ID") ) {
+                           Log.d(TAG,
+                                   device.deviceName + " is "
+                                          + record.get(TXTRECORD_PROP_AVAILABLE));
 
-                            Log.d("FOUND REGISTRATION ID", record.get("REG_ID"));
+                           Log.d("FOUND REGISTRATION ID", record.get("REG_ID1") + record.get("REG_ID2"));
 
-                            UI_Shell.gcm.sendMessage(UI_Shell.userName, record.get("REG_ID"));
-                        }
+                            UI_Shell.gcm.sendMessage(UI_Shell.userName, record.get("REG_ID1") + record.get("REG_ID2"));
+                       // }
                     }
                 });
 
