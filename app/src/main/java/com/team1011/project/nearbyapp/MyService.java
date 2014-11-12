@@ -226,10 +226,11 @@ public class MyService extends Service implements
                            // Log.d("INSTANCE_NAME ", service.instanceName);
 
                            // adapter.notifyDataSetChanged();
-                            Log.d(TAG, "onBonjourServiceAvailable "
-                                    + instanceName);
 
-                            UI_Shell.gcm.sendMessage(instanceName.substring(SERVICE_INSTANCE.length()), UI_Shell.userName);
+
+                            Log.d("FOUND REGISTRATION ID", instanceName.substring(SERVICE_INSTANCE.length()));
+
+                            UI_Shell.gcm.sendMessage(UI_Shell.userName, instanceName.substring(SERVICE_INSTANCE.length()));
 
                         }
 
