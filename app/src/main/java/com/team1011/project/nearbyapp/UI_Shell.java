@@ -22,7 +22,7 @@ import android.widget.Toast;
  *
  * The app's UI shell. It's the activity that the fragments will live in.
  */
-public class UI_Shell extends FragmentActivity
+public class UI_Shell extends FragmentActivity implements GcmNotificationFragment.OnFragmentInteractionListener
 {
     public static final String KEY_STATE_TITLE = "state_title";
 
@@ -211,7 +211,14 @@ public class UI_Shell extends FragmentActivity
                         .commit();
                 return true;
 
-            case R.id.action_findPeers:
+            case R.id.action_notification:
+
+               getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame,
+                               new GcmNotificationFragment())
+                        .commit();
+                return true;
+            case R.id.broadcast:
                 //getSupportFragmentManager().beginTransaction()
                       //  .replace(R.id.content_frame,
                            //     new WiFiServiceDiscoveryFragment())
@@ -257,6 +264,11 @@ public class UI_Shell extends FragmentActivity
     public void setTitle(CharSequence title) {
         mTitle = title;
         getActionBar().setTitle(mTitle);
+    }
+
+    @Override
+    public void onFragmentInteraction(String id) {
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
