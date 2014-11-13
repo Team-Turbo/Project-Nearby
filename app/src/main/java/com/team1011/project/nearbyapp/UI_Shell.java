@@ -54,6 +54,10 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public static int getCurrentCategoryInt() {
+        return currCategory;
+    }
+
     public static String getCurrentCategory() {
         return mDrawerTitles[currCategory];
     }
