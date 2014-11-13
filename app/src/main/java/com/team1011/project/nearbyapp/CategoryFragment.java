@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.Iterator;
@@ -18,7 +17,7 @@ import java.util.Map;
  *
  * The category fragment.
  */
-public abstract class CategoryFragment extends Fragment {
+public class CategoryFragment extends Fragment {
 
     enum textType {
         RECEIVED, SENT
@@ -44,7 +43,7 @@ public abstract class CategoryFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_category, container, false);
         mRootView = rootView;
 
-        rootView.findViewById(R.id.placeholder_bg).setBackgroundColor(
+        rootView.findViewById(R.id.fragment_category_bg).setBackgroundColor(
                 Color.rgb(
                         (int) (Math.random() * 225),
                         (int) (Math.random() * 225),
@@ -57,7 +56,7 @@ public abstract class CategoryFragment extends Fragment {
                         + "\n" + "Section " + String.valueOf(getArguments().getInt(ARG_SECTION_NUMBER))
         );
 
-        EditText et;
+        setCategory(UI_Shell.getCurrentCategoryInt());
 
         Iterator it = mCategory.getElements().entrySet().iterator();
         while (it.hasNext())
@@ -66,7 +65,7 @@ public abstract class CategoryFragment extends Fragment {
 
             String typeOfElement = pairs.getValue().getFirst();
 
-            if (typeOfElement.equals("edittext")) {
+            if (typeOfElement.equals("EditText")) {
                 processEditText(pairs.getKey());
             } else {
                 processList(pairs.getKey(), pairs.getValue());
@@ -76,10 +75,21 @@ public abstract class CategoryFragment extends Fragment {
         return rootView;
     }
 
-    public void setCategory(Category c) {
-        mCategory = c;
+    public void setCategory(int position) {
+        switch (position) {
+            case 0:
+                mCategory = new Jobs();
+                break;
+            case 1:
+                mCategory = new Dating();
+                break;
+            case 2:
+                mCategory = new BuySell();
+                break;
+        }
     }
 
+    /*
     public abstract String getNotificationText(textType tt);
 
     public abstract String getTabText(textType tt);
@@ -87,6 +97,7 @@ public abstract class CategoryFragment extends Fragment {
     public abstract Map<String, String> getElements();
 
     public abstract void setValue(String key, String value);
+    */
 
     /* UI elements with no choices */
     private void processEditText(String key) {
