@@ -68,6 +68,7 @@ public class MyService extends Service implements
 
     private String rID;
 
+    public static GCMObject gcm = new GCMObject();
 
     @Override
     public void onCreate() {
@@ -89,10 +90,13 @@ public class MyService extends Service implements
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "Broadcasting started", Toast.LENGTH_SHORT).show();
+        Bundle bundle;
 
-        Bundle bundle = intent.getExtras();
+        if (intent != null) {
 
-        rID = bundle.getString("REG_ID");
+            bundle = intent.getExtras();
+            rID = bundle.getString("REG_ID");
+        }
 
         servicesList = new WiFiDirectServicesList();
 
@@ -269,13 +273,9 @@ public class MyService extends Service implements
                                   // device.deviceName + " is "
                                         //  + record.get(TXTRECORD_PROP_AVAILABLE));
 
-
-                        Log.d("DOMAIN NAME", fullDomainName);
-
-
-                           Log.d("FOUND REGISTRATION ID", record.get("RID"));
-
-                            UI_Shell.gcm.sendMessage(UI_Shell.userName, record.get("RID"));
+                            Log.d("FOUND REGISTRATION ID", record.get("RID"));
+                            //Send my userName to the found id
+                            gcm.sendMessage(UI_Shell.userName + rID, record.get("RID"));
                        }
                     }
                 });

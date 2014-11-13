@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class GcmIntentService extends IntentService {
 
     public static ArrayList<String> messages = new ArrayList<String>();
+
     public GcmIntentService() {
         super("GcmIntentService");
     }
@@ -32,9 +33,11 @@ public class GcmIntentService extends IntentService {
              * any message types you're not interested in, or that you don't
              * recognize.
              */
-            messages.add(extras.toString());
+            messages.add(extras.get("text").toString());
             for (int i = 0; i< messages.size(); i++)
                 Log.d("GCM Message received", messages.get(i));
+
+
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.
         GcmBroadcastReceiver.completeWakefulIntent(intent);

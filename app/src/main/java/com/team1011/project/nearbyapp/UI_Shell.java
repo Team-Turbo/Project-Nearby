@@ -46,7 +46,7 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
     protected static String myRegID;
 
 
-    protected static GCMObject gcm;
+
 
     // For category pages
 
@@ -77,9 +77,9 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.categories_drawer);
 
-        gcm = new GCMObject();
 
-        gcm.registerInBackground(getApplicationContext());
+
+        MyService.gcm.registerInBackground(getApplicationContext());
 
         //>> Setup: titles, texts and other arrays of data
         if (savedInstanceState != null) {
