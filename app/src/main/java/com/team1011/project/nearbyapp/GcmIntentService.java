@@ -34,6 +34,8 @@ public class GcmIntentService extends IntentService {
              * recognize.
              */
             messages.add(extras.get("text").toString());
+
+
             for (int i = 0; i< messages.size(); i++)
                 Log.d("GCM Message received", messages.get(i));
 

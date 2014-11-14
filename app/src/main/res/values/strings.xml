@@ -17,4 +17,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_devices">Near You</string>
 
+    <string name="btn_send">Send</string>
+    <string name="txt_hint">Type Message</string>
+
 </resources>

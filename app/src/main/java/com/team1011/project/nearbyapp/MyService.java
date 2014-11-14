@@ -64,8 +64,6 @@ public class MyService extends Service implements
 
     HashMap<String, String> records = new HashMap<String, String>();
 
-    static int count = 0;
-
     private String rID;
 
     public static GCMObject gcm = new GCMObject();
@@ -275,7 +273,7 @@ public class MyService extends Service implements
 
                             Log.d("FOUND REGISTRATION ID", record.get("RID"));
                             //Send my userName to the found id
-                            gcm.sendMessage(UI_Shell.userName + rID, record.get("RID"));
+                            gcm.sendMessage(rID, record.get("RID"));
                        }
                     }
                 });

@@ -119,6 +119,11 @@ public class GcmNotificationFragment extends Fragment implements AbsListView.OnI
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
             mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame,
+                            new ChatFragment(mAdapter.getItem(position).toString()))
+                    .commit();
         }
     }
 
