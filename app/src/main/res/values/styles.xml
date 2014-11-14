@@ -46,4 +46,12 @@
         <item name="android:textColor">#33B5E5</item>
     </style>
 
+    <!-- Category UI elements styles -->
+
+    <style name="catui_identifier">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:textSize">@dimen/catui_txtSize</item>
+    </style>
+
 </resources>

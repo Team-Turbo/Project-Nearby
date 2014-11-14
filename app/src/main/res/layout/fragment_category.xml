@@ -12,6 +12,16 @@
         android:id="@+id/section_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:gravity="end"
         android:textColor="@android:color/background_light" />
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/fragment_category_table">
+
+    </TableLayout>
 
 </RelativeLayout>

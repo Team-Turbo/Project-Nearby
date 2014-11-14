@@ -47,8 +47,8 @@ public class Category_Shell extends Fragment
 
         //>> Setup: titles, texts and other arrays of data
         mTabsTitles = new String[] {
-                  "[Receive]"
-                , "[Send]"
+                  "Match Creation"
+                , "Current Matches"
         };
         mTabsIcons = new int[] {
                   R.drawable.ic_launcher
@@ -98,7 +98,7 @@ public class Category_Shell extends Fragment
             mActionBar.addTab(
                     mActionBar.newTab()
                             .setText(mPagerAdapter.getPageTitle(i))
-                            .setIcon(mPagerAdapter.getPageIcon(i))
+                            //.setIcon(mPagerAdapter.getPageIcon(i))
                             .setTabListener(tabListener));
         }
     }
