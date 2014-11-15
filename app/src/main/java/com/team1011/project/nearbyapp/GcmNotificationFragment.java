@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.TextView;
-
 
 import com.team1011.project.nearbyapp.dummy.DummyContent;
 
@@ -46,7 +44,7 @@ public class GcmNotificationFragment extends Fragment implements AbsListView.OnI
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    private ArrayAdapter mAdapter;
 
 
     // TODO: Rename and change types of parameters
@@ -78,6 +76,8 @@ public class GcmNotificationFragment extends Fragment implements AbsListView.OnI
         // TODO: Change Adapter to display your content
         mAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, GcmIntentService.messages);
+
+
     }
 
     @Override
@@ -91,6 +91,8 @@ public class GcmNotificationFragment extends Fragment implements AbsListView.OnI
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
+
+        mAdapter.notifyDataSetChanged();
 
         return view;
     }
