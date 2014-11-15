@@ -12,26 +12,14 @@
         android:icon="@drawable/ic_launcher"
         android:showAsAction="ifRoom" />
 
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
-
-    <item android:id="@+id/stopBroadcast"
-        android:title="Disable Broadcast"
-        android:orderInCategory="100"
+    <item android:id="@+id/restartWifi"
+        android:title="Restart Wi-Fi"
+        android:orderInCategory="1"
         android:showAsAction="never" />
 
     <item android:id="@+id/broadcast"
         android:title="Enable Broadcast"
-        android:orderInCategory="100"
+        android:orderInCategory="2"
         android:showAsAction="never" />
-
-    <item android:id="@+id/resetWifi"
-        android:title="Reset Wi-Fi"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
-
-
 
 </menu>

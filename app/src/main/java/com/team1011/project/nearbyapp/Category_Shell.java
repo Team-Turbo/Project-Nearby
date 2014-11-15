@@ -11,6 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Melvin on 10/22/2014.
  *
@@ -115,13 +118,27 @@ public class Category_Shell extends Fragment
 
     public static class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
+        private static Map<int[], Fragment> fragmentHolder = new HashMap<int[], Fragment>();
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
-        public Fragment getItem(int i) {
-            return new CategoryFragment(i);
+        public Fragment getItem(int i)
+        {
+            int[] key = {UI_Shell.getCurrentCategoryInt(), i};
+
+            if (fragmentHolder.containsKey(key))
+            {
+                return fragmentHolder.get(key);
+            }
+            else
+            {
+                Fragment newFrag = new CategoryFragment(i);
+                fragmentHolder.put(key, newFrag);
+                return newFrag;
+            }
         }
 
         @Override

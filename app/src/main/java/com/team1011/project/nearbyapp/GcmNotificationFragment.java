@@ -123,8 +123,9 @@ public class GcmNotificationFragment extends Fragment implements AbsListView.OnI
             mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
 
             getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame,
+                    .add(R.id.content_frame,
                             new ChatFragment(mAdapter.getItem(position).toString()))
+                    .addToBackStack(null)
                     .commit();
         }
     }

@@ -32,7 +32,7 @@ import java.util.Map;
 /**
  * Created by Filip on 2014-11-03.
  */
-public class MyService extends Service implements
+public class BroadcastService extends Service implements
         WifiP2pManager.ConnectionInfoListener{
 
     private Looper mServiceLooper;
@@ -68,6 +68,8 @@ public class MyService extends Service implements
 
     public static GCMObject gcm = new GCMObject();
 
+    public static boolean isRunning = false;
+
     @Override
     public void onCreate() {
         // Start up the thread running the service.  Note that we create a
@@ -88,6 +90,8 @@ public class MyService extends Service implements
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "Broadcasting started", Toast.LENGTH_SHORT).show();
+        isRunning = true;
+
         Bundle bundle;
 
         if (intent != null) {
@@ -97,8 +101,6 @@ public class MyService extends Service implements
         }
 
         servicesList = new WiFiDirectServicesList();
-
-
 
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
@@ -160,42 +162,30 @@ public class MyService extends Service implements
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo p2pInfo) {
-
-
-
         if (p2pInfo.isGroupOwner) {
             Log.d(TAG, "Connected as group owner");
             Log.d("", "Connected as group owner");
             Toast.makeText(getApplicationContext(), "OWNER", Toast.LENGTH_SHORT).show();
             // start new group owner socket handler
-
-
         } else {
             Log.d(TAG, "Connected as peer");
             Log.d("", "Connected as peer");
             Toast.makeText(getApplicationContext(), "Peer", Toast.LENGTH_SHORT).show();
             // start new client socket  handler
         }
-
-
     }
 
     private void startRegistrationAndDiscovery() {
         Map<String, String> record = new HashMap<String, String>();
 
-       //record.put(TXTRECORD_PROP_AVAILABLE, "visible");
+        //record.put(TXTRECORD_PROP_AVAILABLE, "visible");
 
+        record.put("RID", rID);
 
-       record.put("RID", rID);
-
-       Log.d("RECORD", record.toString());
-
-
-
+        Log.d("RECORD", record.toString());
 
         final WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
                 SERVICE_INSTANCE, SERVICE_REG_TYPE, record);
-
 
         manager.addLocalService(channel, service, new WifiP2pManager.ActionListener() {
 
@@ -211,15 +201,10 @@ public class MyService extends Service implements
             }
         });
 
-
         discoverService();
-
-
     }
 
-
     private void discoverService() {
-
         /*
          * Register listeners for DNS-SD services. These are callbacks invoked
          * by the system when a service is actually discovered.
@@ -294,8 +279,8 @@ public class MyService extends Service implements
                         Log.d("","Failed adding service discovery request");
                     }
                 });
-        manager.discoverServices(channel, new WifiP2pManager.ActionListener() {
 
+        manager.discoverServices(channel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
                 Log.d("", "Service discovery initiated");
@@ -309,12 +294,12 @@ public class MyService extends Service implements
         });
     }
 
-
-
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onDestroy() {
         Toast.makeText(this, "Broadcasting stopped", Toast.LENGTH_SHORT).show();
+        isRunning = false;
+
         if (manager != null && channel != null) {
             manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
 

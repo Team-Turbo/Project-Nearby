@@ -8,6 +8,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +16,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 /**
  * Created by Melvin on 10/22/2014.
@@ -45,11 +45,10 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
 
     protected static String myRegID;
 
-
-
+    // Menu stuff
+    private static Menu menu;
 
     // For category pages
-
     private static int currCategory = -1;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,8 +63,6 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,9 +74,7 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.categories_drawer);
 
-
-
-        MyService.gcm.registerInBackground(getApplicationContext());
+        BroadcastService.gcm.registerInBackground(getApplicationContext());
 
         //>> Setup: titles, texts and other arrays of data
         if (savedInstanceState != null) {
@@ -146,8 +141,8 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
         imageUrl = bundle.getString("PROFILE_PIC");
         imageUrl = imageUrl.substring(0, imageUrl.length() - 2) + 400;
 
-        //>> Other
-
+        //>> Set content
+        getActionBar().setTitle(R.string.title_activity_profile);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame,
                         new Profile(userName, displayName, birthDay, imageUrl, aboutMe))
@@ -156,14 +151,17 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
 
     @Override
     public void onBackPressed() {
-
-        super.onBackPressed();
+        FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStack();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        UI_Shell.menu = menu;
+
         menu.clear();
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -176,7 +174,6 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
 
     @Override
     public void onDestroy() {
-
         super.onDestroy();
     }
 
@@ -197,18 +194,10 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                Toast.makeText(this, "SETTINGS", Toast.LENGTH_SHORT).show();
-
-                return true;
-            case R.id.stopBroadcast:
-                Intent stopintent = new Intent(this, MyService.class);
-                stopService(stopintent);
-
-                return true;
-
+        switch (item.getItemId())
+        {
             case R.id.action_profile:
+                getActionBar().setTitle(R.string.title_activity_profile);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame,
                                 new Profile(userName, displayName, birthDay, imageUrl, aboutMe))
@@ -216,33 +205,37 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
                 return true;
 
             case R.id.action_notification:
-
-               getSupportFragmentManager().beginTransaction()
+                getActionBar().setTitle(R.string.title_activity_notifications);
+                getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame,
                                new GcmNotificationFragment())
                         .commit();
                 return true;
-            case R.id.broadcast:
-                //getSupportFragmentManager().beginTransaction()
-                      //  .replace(R.id.content_frame,
-                           //     new WiFiServiceDiscoveryFragment())
-                        //.commit();
 
-                Intent intent = new Intent(this, MyService.class);
+            case R.id.broadcast:
+                MenuItem broadcastMenuItem = menu.findItem(R.id.broadcast);
+                Intent intent = new Intent(this, BroadcastService.class);
                 Bundle bundle = new Bundle();
 
                 bundle.putString("REG_ID", myRegID);
 
                 intent.putExtras(bundle);
 
-                startService(intent);
+                if (BroadcastService.isRunning) {
+                    broadcastMenuItem.setTitle("Enable Broadcast");
+                    stopService(intent);
+                } else {
+                    broadcastMenuItem.setTitle("Disable Broadcast");
+                    startService(intent);
+                }
                 return true;
-            case R.id.resetWifi:
+
+            case R.id.restartWifi:
                 WifiManager wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
                 wifiManager.setWifiEnabled(false);
-
                 wifiManager.setWifiEnabled(true);
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }

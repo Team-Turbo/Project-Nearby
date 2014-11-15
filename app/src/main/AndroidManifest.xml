@@ -62,7 +62,7 @@
         </receiver>
 
         <service
-            android:name=".MyService"
+            android:name=".BroadcastService"
             android:enabled="true">
         </service>
         <service
