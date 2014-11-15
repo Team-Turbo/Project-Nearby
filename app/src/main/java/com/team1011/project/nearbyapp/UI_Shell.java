@@ -142,7 +142,7 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
         imageUrl = imageUrl.substring(0, imageUrl.length() - 2) + 400;
 
         //>> Set content
-        getActionBar().setTitle(R.string.title_activity_profile);
+        setTitle(R.string.title_activity_profile);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame,
                         new Profile(userName, displayName, birthDay, imageUrl, aboutMe))
@@ -197,7 +197,7 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
         switch (item.getItemId())
         {
             case R.id.action_profile:
-                getActionBar().setTitle(R.string.title_activity_profile);
+                setTitle(R.string.title_activity_profile);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame,
                                 new Profile(userName, displayName, birthDay, imageUrl, aboutMe))
@@ -205,7 +205,7 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
                 return true;
 
             case R.id.action_notification:
-                getActionBar().setTitle(R.string.title_activity_notifications);
+                setTitle(R.string.title_activity_notifications);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame,
                                new GcmNotificationFragment())

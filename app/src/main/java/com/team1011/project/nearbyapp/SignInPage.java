@@ -80,7 +80,7 @@ public class SignInPage extends Activity implements GoogleApiClient.ConnectionCa
 
     }
 
-    public void onClickLogout(View v) {
+    public void onClickSignOut(View v) {
         if (mGoogleApiClient.isConnected()) {
             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
             mGoogleApiClient.disconnect();
