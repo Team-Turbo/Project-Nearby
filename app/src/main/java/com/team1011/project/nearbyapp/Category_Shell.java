@@ -83,7 +83,7 @@ public class Category_Shell extends Fragment
 
             @Override
             public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                mViewPager.setCurrentItem(tab.getPosition());
+
             }
         };
 

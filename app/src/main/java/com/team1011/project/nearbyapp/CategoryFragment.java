@@ -135,10 +135,6 @@ public class CategoryFragment extends Fragment {
     /*
     public abstract String getNotificationText(textType tt);
 
-    public abstract String getTabText(textType tt);
-
-    public abstract Map<String, String> getElements();
-
     public abstract void setValue(String key, String value);
     */
 

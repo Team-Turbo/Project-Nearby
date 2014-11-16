@@ -271,24 +271,24 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        public int prevPos = -1;
+
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
-            selectDrawerItem(position);
+            currCategory = position;
+
+            if (prevPos != position) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, new Category_Shell())
+                        .commit();
+            }
+
+            // Highlight the selected item, update the title, and close the drawer
+            mDrawerList.setItemChecked(position, true);
+            setTitle(mDrawerTitles[position]);
+            mDrawerLayout.closeDrawer(mDrawerList);
+
+            prevPos = position;
         }
-    }
-
-    /** Swaps fragments in the main content view */
-    private void selectDrawerItem(int position) {
-        currCategory = position;
-
-        // Insert the fragment by replacing any existing fragment
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, new Category_Shell())
-                .commit();
-
-        // Highlight the selected item, update the title, and close the drawer
-        mDrawerList.setItemChecked(position, true);
-        setTitle(mDrawerTitles[position]);
-        mDrawerLayout.closeDrawer(mDrawerList);
     }
 }
