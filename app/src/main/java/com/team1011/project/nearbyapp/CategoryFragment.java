@@ -28,26 +28,26 @@ public class CategoryFragment extends Fragment {
         RECEIVED, SENT
     }
 
-    public static final String ARG_SECTION_NUMBER = "section_number";
-
     private RelativeLayout bgLayout;
     private TableLayout tableLayout;
 
+    private int[] id = new int[2];
+
     private Category mCategory;
 
-    public CategoryFragment(int sectionNumber) {
-        Bundle args = new Bundle();
+    public CategoryFragment(int categoryNum, int sectionNumber) {
+        id[0] = categoryNum;
+        id[1] = sectionNumber;
+    }
 
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-
-        setArguments(args);
+    public int[] getID() {
+        return id;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_category, container, false);
-        int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
 
         bgLayout = (RelativeLayout) rootView.findViewById(R.id.fragment_category_bg);
         tableLayout  = (TableLayout) rootView.findViewById(R.id.fragment_category_table);
@@ -61,15 +61,16 @@ public class CategoryFragment extends Fragment {
         );
 
         ((TextView) rootView.findViewById(R.id.section_label)).setText(
-                "Category: " + UI_Shell.getCurrentCategory()
-                        + "\n" + "Section " + String.valueOf(sectionNumber)
+                "Category: " + id[0]
+                        + "\n" + "Section " + id[1]
         );
 
-        setCategory(UI_Shell.getCurrentCategoryInt());
+        setCategory(id[0]);
 
-        switch (sectionNumber)
+        // for the below sections
+        switch (id[1])
         {
-            // match creation
+            // "match creation" section
             case 0:
                 Iterator it = mCategory.getElements().entrySet().iterator();
                 while (it.hasNext()) {
@@ -85,7 +86,7 @@ public class CategoryFragment extends Fragment {
                 }
                 break;
 
-            // current matches / chats
+            // "current matches / chats" section
             case 1:
                 break;
         }
@@ -93,8 +94,8 @@ public class CategoryFragment extends Fragment {
         return rootView;
     }
 
-    public void setCategory(int position) {
-        switch (position) {
+    public void setCategory(int categoryPosition) {
+        switch (categoryPosition) {
             case 0:
                 mCategory = new Jobs();
                 break;
@@ -106,16 +107,6 @@ public class CategoryFragment extends Fragment {
                 break;
         }
     }
-
-    /*
-    public abstract String getNotificationText(textType tt);
-
-    public abstract String getTabText(textType tt);
-
-    public abstract Map<String, String> getElements();
-
-    public abstract void setValue(String key, String value);
-    */
 
     /* UI elements with no choices */
     private void processEditText(String key) {
@@ -139,5 +130,16 @@ public class CategoryFragment extends Fragment {
     private void processList(String key, LinkedList<String> choices) {
 
     }
+
+    // TODO: put below methods into the Category class
+    /*
+    public abstract String getNotificationText(textType tt);
+
+    public abstract String getTabText(textType tt);
+
+    public abstract Map<String, String> getElements();
+
+    public abstract void setValue(String key, String value);
+    */
 
 }
