@@ -23,7 +23,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -45,22 +44,14 @@ public class BroadcastService extends Service implements
     public static final String SERVICE_INSTANCE = "_nearbyapp";
     public static final String SERVICE_REG_TYPE = "_presence._tcp";
 
-    public static final int MESSAGE_READ = 0x400 + 1;
-    public static final int MY_HANDLE = 0x400 + 2;
     private WifiP2pManager manager;
 
-    static final int SERVER_PORT = 4546;
 
     private final IntentFilter intentFilter = new IntentFilter();
     private Channel channel;
     private BroadcastReceiver receiver = null;
     private WifiP2pDnsSdServiceRequest serviceRequest;
 
-    private WiFiDirectServicesList servicesList;
-
-    private TextView statusTxtView;
-
-    private WiFiDirectServicesList.WiFiDevicesAdapter adapter;
 
     HashMap<String, String> records = new HashMap<String, String>();
 
@@ -100,7 +91,6 @@ public class BroadcastService extends Service implements
             rID = bundle.getString("REG_ID");
         }
 
-        servicesList = new WiFiDirectServicesList();
 
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
@@ -114,8 +104,6 @@ public class BroadcastService extends Service implements
         channel = manager.initialize(this, this.getMainLooper(), null);
 
         startRegistrationAndDiscovery();
-
-        servicesList = new WiFiDirectServicesList();
 
 
         // For each start request, send a message to start a job and deliver the
