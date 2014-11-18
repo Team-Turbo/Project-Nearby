@@ -22,7 +22,7 @@ import android.widget.ListView;
  *
  * The app's UI shell. It's the activity that the fragments will live in.
  */
-public class UI_Shell extends FragmentActivity implements NotificationFragment.OnFragmentInteractionListener
+public class UI_Shell extends FragmentActivity implements GcmNotificationFragment.OnFragmentInteractionListener
 {
     public static final String KEY_STATE_TITLE = "state_title";
 
@@ -42,8 +42,6 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
     private static String birthDay;
     private static String imageUrl;
     private static String aboutMe;
-
-
 
     protected static String myRegID;
 
@@ -70,17 +68,13 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ui_shell);
 
-        Intent GCMIntent = new Intent(this, GCMhandlerService.class);
-
-        startService(GCMIntent);
-
         //>> Setup: variables
         final ActionBar mActionBar = getActionBar();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.categories_drawer);
 
-        GCMhandlerService.gcm.registerInBackground(getApplicationContext());
+        BroadcastService.gcm.registerInBackground(getApplicationContext());
 
         //>> Setup: titles, texts and other arrays of data
         if (savedInstanceState != null) {
@@ -214,7 +208,7 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
                 setTitle(R.string.title_activity_notifications);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame,
-                               new NotificationFragment())
+                               new GcmNotificationFragment())
                         .commit();
                 return true;
 

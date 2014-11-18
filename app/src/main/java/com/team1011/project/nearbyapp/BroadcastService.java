@@ -2,6 +2,7 @@ package com.team1011.project.nearbyapp;
 
 import android.annotation.TargetApi;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -23,9 +24,6 @@ import android.os.Message;
 import android.os.Process;
 import android.util.Log;
 import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,19 +49,17 @@ public class BroadcastService extends Service implements
 
     private final IntentFilter intentFilter = new IntentFilter();
     private Channel channel;
+    private BroadcastReceiver receiver = null;
     private WifiP2pDnsSdServiceRequest serviceRequest;
+
+
+    HashMap<String, String> records = new HashMap<String, String>();
+
     private String rID;
-    private HashMap<String, String> records = new HashMap<String, String>();
-    private JSONObject data = new JSONObject();
 
-
-
-
-
+    public static GCMObject gcm = new GCMObject();
 
     public static boolean isRunning = false;
-
-
 
     @Override
     public void onCreate() {
@@ -80,7 +76,6 @@ public class BroadcastService extends Service implements
         // Get the HandlerThread's Looper and use it for our Handler
         mServiceLooper = thread.getLooper();
         mServiceHandler = new ServiceHandler(mServiceLooper);
-
     }
 
     @Override
@@ -95,6 +90,7 @@ public class BroadcastService extends Service implements
             bundle = intent.getExtras();
             rID = bundle.getString("REG_ID");
         }
+
 
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
@@ -176,15 +172,6 @@ public class BroadcastService extends Service implements
 
         Log.d("RECORD", record.toString());
 
-        try {
-            data.put("TYPE", "control");
-            data.put("USER_NAME", UI_Shell.userName);
-            data.put("REG_ID", rID);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
         final WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
                 SERVICE_INSTANCE, SERVICE_REG_TYPE, record);
 
@@ -231,8 +218,11 @@ public class BroadcastService extends Service implements
                             service.serviceRegistrationType = registrationType;
 
                             records.put(srcDevice.deviceAddress, instanceName);
+                          //  adapter.add(service);
                             Log.d("DEVICE_ADDRESS ", records.toString() + "" );
+                           // Log.d("INSTANCE_NAME ", service.instanceName);
 
+                           // adapter.notifyDataSetChanged();
                             Log.d(TAG, "onBonjourServiceAvailable "
                                     + instanceName);
 
@@ -250,13 +240,13 @@ public class BroadcastService extends Service implements
                             WifiP2pDevice device) {
 
                        if (record.containsKey("RID")  && record.get("RID")!= null) {
+                          // Log.d(TAG,
+                                  // device.deviceName + " is "
+                                        //  + record.get(TXTRECORD_PROP_AVAILABLE));
 
                             Log.d("FOUND REGISTRATION ID", record.get("RID"));
                             //Send my userName to the found id
-
-                           GCMhandlerService.gcm.sendMessage(data.toString(), record.get("RID"));
-
-
+                            gcm.sendMessage(rID, record.get("RID"));
                        }
                     }
                 });
