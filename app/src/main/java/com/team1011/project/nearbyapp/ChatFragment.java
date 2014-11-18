@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +47,8 @@ public class ChatFragment extends Fragment {
 
                     @Override
                     public void onClick(View arg0) {
-                        if (BroadcastService.gcm != null) {
-                            BroadcastService.gcm.sendMessage(chatLine.getText().toString(), regID);
+                        if (GCMhandlerService.gcm != null) {
+                            GCMhandlerService.gcm.sendMessage(chatLine.getText().toString(), regID);
                             pushMessage("Me: " + chatLine.getText().toString());
                             chatLine.setText("");
                             chatLine.clearFocus();
