@@ -158,7 +158,12 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
     @Override
     public void onBackPressed() {
         FragmentManager fm = getSupportFragmentManager();
-        fm.popBackStack();
+
+        if (fm.getBackStackEntryCount() > 0) {
+            fm.popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
