@@ -35,6 +35,7 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
+    private DrawerItemClickListener mDrawerItemClickListener;
     private ListView mDrawerList;
 
     public static String userName;
@@ -42,8 +43,6 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
     private static String birthDay;
     private static String imageUrl;
     private static String aboutMe;
-
-
 
     protected static String myRegID;
 
@@ -128,7 +127,8 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
                 R.layout.categories_list_item, mDrawerTitles));
 
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        mDrawerItemClickListener = new DrawerItemClickListener();
+        mDrawerList.setOnItemClickListener(mDrawerItemClickListener);
 
         //>> Setup: action bar
         mActionBar.setDisplayShowTitleEnabled(true);
@@ -168,6 +168,8 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
         menu.clear();
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
+        updateBroadcastMenuItem(BroadcastService.isRunning);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -204,6 +206,7 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
         {
             case R.id.action_profile:
                 setTitle(R.string.title_activity_profile);
+                mDrawerItemClickListener.clean();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame,
                                 new Profile(userName, displayName, birthDay, imageUrl, aboutMe))
@@ -212,6 +215,7 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
 
             case R.id.action_notification:
                 setTitle(R.string.title_activity_notifications);
+                mDrawerItemClickListener.clean();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame,
                                new NotificationFragment())
@@ -219,7 +223,6 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
                 return true;
 
             case R.id.broadcast:
-                MenuItem broadcastMenuItem = menu.findItem(R.id.broadcast);
                 Intent intent = new Intent(this, BroadcastService.class);
                 Bundle bundle = new Bundle();
 
@@ -227,11 +230,11 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
 
                 intent.putExtras(bundle);
 
+                updateBroadcastMenuItem(!BroadcastService.isRunning);
+
                 if (BroadcastService.isRunning) {
-                    broadcastMenuItem.setTitle("Enable Broadcast");
                     stopService(intent);
                 } else {
-                    broadcastMenuItem.setTitle("Disable Broadcast");
                     startService(intent);
                 }
                 return true;
@@ -274,6 +277,16 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
 
     }
 
+    private void updateBroadcastMenuItem(boolean broadcastEnabled) {
+        MenuItem broadcastMenuItem = menu.findItem(R.id.broadcast);
+
+        if (broadcastEnabled) {
+            broadcastMenuItem.setTitle("Disable Broadcast");
+        } else {
+            broadcastMenuItem.setTitle("Enable Broadcast");
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -295,6 +308,10 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
             mDrawerLayout.closeDrawer(mDrawerList);
 
             prevPos = position;
+        }
+
+        public void clean() {
+            mDrawerList.setItemChecked(prevPos, false);
         }
     }
 }
