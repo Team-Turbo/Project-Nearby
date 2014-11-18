@@ -36,7 +36,6 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
-    private DrawerItemClickListener mDrawerItemClickListener;
 
     public static String userName;
     private static String displayName;
@@ -123,8 +122,7 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
                 R.layout.categories_list_item, mDrawerTitles));
 
-        mDrawerItemClickListener = new DrawerItemClickListener();
-        mDrawerList.setOnItemClickListener(mDrawerItemClickListener);
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         //>> Setup: action bar
         mActionBar.setDisplayShowTitleEnabled(true);
@@ -200,7 +198,6 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
         {
             case R.id.action_profile:
                 setTitle(R.string.title_activity_profile);
-                mDrawerItemClickListener.clean();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame,
                                 new Profile(userName, displayName, birthDay, imageUrl, aboutMe))
@@ -209,7 +206,6 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
 
             case R.id.action_notification:
                 setTitle(R.string.title_activity_notifications);
-                mDrawerItemClickListener.clean();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame,
                                new GcmNotificationFragment())
@@ -293,10 +289,6 @@ public class UI_Shell extends FragmentActivity implements GcmNotificationFragmen
             mDrawerLayout.closeDrawer(mDrawerList);
 
             prevPos = position;
-        }
-
-        public void clean() {
-            mDrawerList.setItemChecked(prevPos, false);
         }
     }
 }
