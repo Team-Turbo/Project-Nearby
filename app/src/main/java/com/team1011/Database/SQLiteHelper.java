@@ -12,6 +12,7 @@ public class SQLiteHelper
     public static final String TABLE_PEOPLE;
     public static final String PERSON_ID;
     public static final String COLUMN_PERSON;
+    public static final String REG_ID;
     private static final String DATABASE_NAME;
     private static final int DATABASE_VERSION;
     private static final String DATABASE_CREATE;
@@ -21,12 +22,13 @@ public class SQLiteHelper
         TABLE_PEOPLE = "people";
         PERSON_ID = "_id";
         COLUMN_PERSON = "person";
+        REG_ID = "id";
         DATABASE_NAME    = "people.db";
         DATABASE_VERSION = 1;
         DATABASE_CREATE  = "create table " +
                 TABLE_PEOPLE + "(" + PERSON_ID +
                 " integer primary key autoincrement, " + COLUMN_PERSON +
-                " text not null);";
+                " text not null, " + REG_ID + " text not null);";
 
     }
 
