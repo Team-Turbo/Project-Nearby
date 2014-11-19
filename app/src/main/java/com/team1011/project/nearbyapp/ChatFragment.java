@@ -38,7 +38,6 @@ public class ChatFragment extends Fragment {
 
     private JSONObject data = new JSONObject();
 
-
     private String targetRegID;
     private String usrName;
 
@@ -68,7 +67,7 @@ public class ChatFragment extends Fragment {
                     Bundle bundle = intent.getExtras();
 
                     //Push received message to the UI
-                    pushMessage(bundle.getString("USER_NAME"), bundle.getString("REG_ID"), bundle.getString("MSG"));
+                    pushMessage(bundle.getString("USER_NAME"), Chat.TYPE_FROM, bundle.getString("MSG"));
 
                 }
             };
@@ -107,7 +106,6 @@ public class ChatFragment extends Fragment {
                                 //put the message into the JSON object to be sent over GCM
                                 data.put("TYPE", "chat");
                                 data.put("USER_NAME", UI_Shell.userName);
-                                data.put("REG_ID", UI_Shell.myRegID);
                                 data.put("MESSAGE", chatLine.getText().toString());
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -117,7 +115,7 @@ public class ChatFragment extends Fragment {
                             GCMstatic.gcm.sendMessage(data.toString(), targetRegID);
 
                             //Push my message to the Fragment
-                            pushMessage(UI_Shell.userName, UI_Shell.myRegID, chatLine.getText().toString());
+                            pushMessage(UI_Shell.userName, Chat.TYPE_TO, chatLine.getText().toString());
                             chatLine.setText("");
                             //chatLine.clearFocus();
                         }
@@ -132,16 +130,16 @@ public class ChatFragment extends Fragment {
     /**
      * Push a message to the user interface
      * @param usr user name to be displayed
-     * @param reg registration ID to be added to the database
+     * @param type type of chat, (from or to)
      * @param readMessage Message to be displayed
      */
-    public void pushMessage(String usr, String reg, String readMessage) {
+    public void pushMessage(String usr, String type, String readMessage) {
         Chat chat = new Chat();
         chat.setMsg(readMessage);
         chat.setUserName(usr);
-        chat.setRegID(reg);
+        chat.setType(type);
         //Add to database
-        chatDataSource.createChat(usr, reg, readMessage);
+        chatDataSource.createChat(usr, type, readMessage);
         //Add the chat to the adapter
         adapter.add(chat);
         //Update the UI
@@ -168,7 +166,8 @@ public class ChatFragment extends Fragment {
                 v = vi.inflate(android.R.layout.simple_list_item_1, null);
             }
             if (chats != null) {
-                String message = chats.get(position).toString();
+                Chat currChat = chats.get(position);
+                String message = currChat.toString();
 
                 if (message != null && !message.isEmpty()) {
                     TextView nameText = (TextView) v
@@ -176,7 +175,7 @@ public class ChatFragment extends Fragment {
 
                     if (nameText != null) {
                         nameText.setText(message);
-                        if (message.startsWith(UI_Shell.userName + ": ")) {
+                        if (currChat.getType().equalsIgnoreCase(Chat.TYPE_TO)) {
                             nameText.setTextAppearance(getActivity(),
                                     R.style.normalText);
                         } else {

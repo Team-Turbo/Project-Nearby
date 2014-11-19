@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.team1011.Database.Chat;
 import com.team1011.Database.Person;
 import com.team1011.Database.PersonDataSource;
 
@@ -73,11 +74,9 @@ public class GcmIntentService extends IntentService {
                 else {
                     //Send the received chat to the chatFragment
                     final String chatUsrname;
-                    final String chatRegId;
                     final String chatmsg;
 
                     chatUsrname = obj.get("USER_NAME").toString();
-                    chatRegId = obj.get("REG_ID").toString();
                     chatmsg = obj.get("MESSAGE").toString();
 
                     Log.d("CHAT_RECEIVED", chatmsg);
@@ -85,7 +84,7 @@ public class GcmIntentService extends IntentService {
                     Intent sendIntent = new Intent("chatBroadcastIntent");
                     Bundle chatBundle = new Bundle();
                     chatBundle.putString("USER_NAME", chatUsrname);
-                    chatBundle.putString("REG_ID", chatRegId);
+                    chatBundle.putString("TYPE", Chat.TYPE_FROM);
                     chatBundle.putString("MSG", chatmsg);
 
                     sendIntent.putExtras(chatBundle);

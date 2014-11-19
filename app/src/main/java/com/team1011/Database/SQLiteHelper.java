@@ -9,26 +9,26 @@ import android.util.Log;
 public class SQLiteHelper
         extends SQLiteOpenHelper
 {
-    public static final String TABLE_PEOPLE;
-    public static final String PERSON_ID;
-    public static final String COLUMN_PERSON;
-    public static final String REG_ID;
     private static final String DATABASE_NAME;
-    private static final int DATABASE_VERSION;
+    private static final int    DATABASE_VERSION;
     private static final String DATABASE_CREATE_PEOPLE;
     private static final String DATABASE_CREATE_CHAT;
 
+    public static final String  TABLE_PEOPLE;
+    public static final String  PERSON_ID;
+    public static final String  COLUMN_PERSON;
+    public static final String  REG_ID;
 
-    public static final String TABLE_CHAT;
-    public static final String CHAT_ID;
-    public static final String COLUMN_USRNAME;
-    public static final String COLUMN_REGID;
-    public static final String COLUMN_MSG;
+    public static final String  TABLE_CHAT;
+    public static final String  CHAT_ID;
+    public static final String  COLUMN_USERNAME_TO;
+    public static final String  COLUMN_TYPE;
+    public static final String  COLUMN_MSG;
 
     static
     {
         DATABASE_NAME    = "people.db";
-        DATABASE_VERSION = 7;
+        DATABASE_VERSION = 8;
 
         TABLE_PEOPLE = "people";
         PERSON_ID = "_id";
@@ -37,13 +37,11 @@ public class SQLiteHelper
 
         TABLE_CHAT = "chat";
         CHAT_ID = "_cid";
-        COLUMN_USRNAME = "name";
-        COLUMN_REGID = "regid";
+        COLUMN_USERNAME_TO = "name_to";
+        COLUMN_TYPE = "type";
         COLUMN_MSG = "msg";
 
-
         DATABASE_CREATE_PEOPLE  =
-
                 "create table " +
                 TABLE_PEOPLE + "(" + PERSON_ID +
                 " integer primary key autoincrement, " + COLUMN_PERSON +
@@ -51,9 +49,8 @@ public class SQLiteHelper
 
         DATABASE_CREATE_CHAT =
                 "create table " +
-                TABLE_CHAT + "(" + CHAT_ID + " integer primary key autoincrement, " + COLUMN_USRNAME +
-                " text not null, " + COLUMN_REGID + " text not null, " + COLUMN_MSG + " text not null);";
-
+                TABLE_CHAT + "(" + CHAT_ID + " integer primary key autoincrement, " + COLUMN_USERNAME_TO +
+                " text not null, " + COLUMN_TYPE + " text not null, " + COLUMN_MSG + " text not null);";
     }
 
     public SQLiteHelper(final Context context)

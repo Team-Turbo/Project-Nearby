@@ -1,13 +1,18 @@
 package com.team1011.Database;
 
+import com.team1011.project.nearbyapp.UI_Shell;
+
 /**
  * Created by Filip on 2014-11-18.
  */
-public class Chat {
+public class Chat
+{
+    public static final String TYPE_TO = "typeTo";
+    public static final String TYPE_FROM = "typeFrom";
 
     private long id;
     private String userName;
-    private String registrationID;
+    private String type;
     private String msg;
 
 
@@ -21,12 +26,12 @@ public class Chat {
         id = i;
     }
 
-    public void setRegID(final String r) {
-        registrationID = r;
+    public void setType(final String t) {
+        type = t;
     }
 
-    public String getRegID() {
-        return registrationID;
+    public String getType() {
+        return type;
     }
 
     public void setUserName(final String u) {
@@ -50,7 +55,9 @@ public class Chat {
     @Override
     public String toString()
     {
-        return userName + ": " + msg;
+        if (type.equalsIgnoreCase(TYPE_TO))
+            return userName + ": " + msg;
+        else
+            return UI_Shell.userName + ": " + msg;
     }
-
 }

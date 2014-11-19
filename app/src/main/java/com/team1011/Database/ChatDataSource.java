@@ -19,14 +19,12 @@ public class ChatDataSource {
     private final String[] allColumns;
     private SQLiteDatabase database;
 
-
-
     {
         allColumns = new String[]
                 {
-                                                SQLiteHelper.CHAT_ID,
-                        SQLiteHelper.COLUMN_USRNAME,
-                        SQLiteHelper.COLUMN_REGID,
+                        SQLiteHelper.CHAT_ID,
+                        SQLiteHelper.COLUMN_USERNAME_TO,
+                        SQLiteHelper.COLUMN_TYPE,
                         SQLiteHelper.COLUMN_MSG
                 };
     }
@@ -47,19 +45,15 @@ public class ChatDataSource {
         dbHelper.close();
     }
 
-
-    public Chat createChat(String usrName, String regID, String msg) {
-
-
-
+    public Chat createChat(String usrName, String type, String msg) {
         final ContentValues values;
         final long insertId;
         final Cursor cursor;
         final Chat newChat;
 
         values = new ContentValues();
-        values.put(SQLiteHelper.COLUMN_USRNAME, usrName);
-        values.put(SQLiteHelper.COLUMN_REGID, regID);
+        values.put(SQLiteHelper.COLUMN_USERNAME_TO, usrName);
+        values.put(SQLiteHelper.COLUMN_TYPE, type);
         values.put(SQLiteHelper.COLUMN_MSG, msg);
 
         try {
@@ -84,7 +78,6 @@ public class ChatDataSource {
 
         }
 
-
         return null;
 
     }
@@ -108,7 +101,7 @@ public class ChatDataSource {
         chats = new ArrayList<Chat>();
         cursor   = database.query(SQLiteHelper.TABLE_CHAT,
                 allColumns,
-                SQLiteHelper.COLUMN_USRNAME + " = \"" + u + "\"",
+                SQLiteHelper.COLUMN_USERNAME_TO + " = \"" + u + "\"",
                 null,
                 null,
                 null,
@@ -144,12 +137,9 @@ public class ChatDataSource {
         chat = new Chat();
         chat.setId(cursor.getLong(0));
         chat.setUserName(cursor.getString(1));
-        chat.setRegID(cursor.getString(2));
+        chat.setType(cursor.getString(2));
         chat.setMsg(cursor.getString(3));
 
         return (chat);
     }
-
-
-
 }
