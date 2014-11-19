@@ -15,20 +15,44 @@ public class SQLiteHelper
     public static final String REG_ID;
     private static final String DATABASE_NAME;
     private static final int DATABASE_VERSION;
-    private static final String DATABASE_CREATE;
+    private static final String DATABASE_CREATE_PEOPLE;
+    private static final String DATABASE_CREATE_CHAT;
+
+
+    public static final String TABLE_CHAT;
+    public static final String CHAT_ID;
+    public static final String COLUMN_USRNAME;
+    public static final String COLUMN_REGID;
+    public static final String COLUMN_MSG;
 
     static
     {
+        DATABASE_NAME    = "people.db";
+        DATABASE_VERSION = 6;
+
         TABLE_PEOPLE = "people";
         PERSON_ID = "_id";
         COLUMN_PERSON = "person";
         REG_ID = "id";
-        DATABASE_NAME    = "people.db";
-        DATABASE_VERSION = 1;
-        DATABASE_CREATE  = "create table " +
+
+        TABLE_CHAT = "chat";
+        CHAT_ID = "_cid";
+        COLUMN_USRNAME = "name";
+        COLUMN_REGID = "regid";
+        COLUMN_MSG = "msg";
+
+
+        DATABASE_CREATE_PEOPLE  =
+
+                "create table " +
                 TABLE_PEOPLE + "(" + PERSON_ID +
                 " integer primary key autoincrement, " + COLUMN_PERSON +
                 " text not null, " + REG_ID + " text not null unique);";
+
+        DATABASE_CREATE_CHAT =
+                "create table " +
+                TABLE_CHAT + "(" + CHAT_ID + " integer primary key autoincrement, " + COLUMN_USRNAME +
+                " text not null, " + COLUMN_REGID + " text not null, " + COLUMN_MSG + " text not null);";
 
     }
 
@@ -43,7 +67,8 @@ public class SQLiteHelper
     @Override
     public void onCreate(final SQLiteDatabase database)
     {
-        database.execSQL(DATABASE_CREATE);
+        database.execSQL(DATABASE_CREATE_PEOPLE);
+        database.execSQL(DATABASE_CREATE_CHAT);
     }
 
     @Override
@@ -55,6 +80,7 @@ public class SQLiteHelper
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PEOPLE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHAT);
         onCreate(db);
     }
 }

@@ -3,10 +3,13 @@ package com.team1011.project.nearbyapp;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.team1011.Database.Chat;
+import com.team1011.Database.ChatDataSource;
 import com.team1011.Database.Person;
 import com.team1011.Database.PersonDataSource;
 
@@ -18,6 +21,8 @@ import java.util.List;
 
 public class GcmIntentService extends IntentService {
 
+
+
     public static ArrayList<Person> messages = new ArrayList<Person>();
     public static List<String> chat = new ArrayList<String>();
 
@@ -25,6 +30,9 @@ public class GcmIntentService extends IntentService {
     private ArrayAdapter<Person> adapter;
 
     public PersonDataSource dataSource = new PersonDataSource(this);
+    public ChatDataSource cDataSource = new ChatDataSource(this);
+
+    public static ChatFragment chatFrag;
 
 
     public GcmIntentService() {
@@ -33,6 +41,7 @@ public class GcmIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.d("ASDF", "onhandleIntent");
         Bundle extras = intent.getExtras();
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         // The getMessageType() intent parameter must be the intent you received
@@ -40,8 +49,8 @@ public class GcmIntentService extends IntentService {
         String messageType = gcm.getMessageType(intent);
 
         dataSource.open();
+        cDataSource.open();                     //Chats
         messages = dataSource.getAllPeople();  //Notifications
-
 
 
         if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
@@ -70,7 +79,29 @@ public class GcmIntentService extends IntentService {
                         messages.add(person);
                 }
                 else {
-                    chat.add(extras.get("text").toString());
+                    final Chat chat;
+                    final String chatUsrname;
+                    final String chatRegId;
+                    final String chatmsg;
+
+                    chatUsrname = obj.get("USER_NAME").toString();
+                    chatRegId = obj.get("REG_ID").toString();
+                    chatmsg = obj.get("MESSAGE").toString();
+
+                    Log.d("CHAT_RECEIVED", chatmsg);
+
+                  //  chat = cDataSource.createChat(chatUsrname, chatRegId, chatmsg);
+
+                    Intent sendIntent = new Intent("myBroadcastIntent");
+                    Bundle chatBundle = new Bundle();
+                    chatBundle.putString("USER_NAME", chatUsrname);
+                    chatBundle.putString("REG_ID", chatRegId);
+                    chatBundle.putString("MSG", chatmsg);
+
+                    sendIntent.putExtras(chatBundle);
+
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(sendIntent);
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

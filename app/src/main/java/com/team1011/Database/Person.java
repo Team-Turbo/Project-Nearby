@@ -23,6 +23,8 @@ public class Person {
         regID = r;
     }
 
+    public String getRegID() { return regID;}
+
     public String getPerson()
     {
         return (person);

@@ -26,6 +26,8 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
 {
     public static final String KEY_STATE_TITLE = "state_title";
 
+    public static ChatFragment activeChatFrag;
+
     // Current action bar title
     private static CharSequence mTitle;
 
@@ -74,6 +76,7 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
         startService(GCMIntent);
 
         //>> Setup: variables
+        activeChatFrag = new ChatFragment(" ", " ");
         final ActionBar mActionBar = getActionBar();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
