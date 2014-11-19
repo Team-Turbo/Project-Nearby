@@ -24,7 +24,7 @@ public class ChatDataSource {
     {
         allColumns = new String[]
                 {
-                        SQLiteHelper.CHAT_ID,
+                                                SQLiteHelper.CHAT_ID,
                         SQLiteHelper.COLUMN_USRNAME,
                         SQLiteHelper.COLUMN_REGID,
                         SQLiteHelper.COLUMN_MSG

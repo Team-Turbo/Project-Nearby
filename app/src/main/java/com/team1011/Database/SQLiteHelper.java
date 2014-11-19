@@ -28,7 +28,7 @@ public class SQLiteHelper
     static
     {
         DATABASE_NAME    = "people.db";
-        DATABASE_VERSION = 6;
+        DATABASE_VERSION = 7;
 
         TABLE_PEOPLE = "people";
         PERSON_ID = "_id";
@@ -47,7 +47,7 @@ public class SQLiteHelper
                 "create table " +
                 TABLE_PEOPLE + "(" + PERSON_ID +
                 " integer primary key autoincrement, " + COLUMN_PERSON +
-                " text not null, " + REG_ID + " text not null unique);";
+                " text not null unique, " + REG_ID + " text not null unique);";
 
         DATABASE_CREATE_CHAT =
                 "create table " +
