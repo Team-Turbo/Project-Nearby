@@ -31,6 +31,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Broadcast your GCM registration ID over WiFi Direct to be discovered by
+ * other users of this app.
+ * Once found, send JSON object
  * Created by Filip on 2014-11-03.
  */
 public class BroadcastService extends Service implements
@@ -42,7 +45,6 @@ public class BroadcastService extends Service implements
     public static final String TAG = "wifidirectdemo";
 
     // TXT RECORD properties
-    public static final String TXTRECORD_PROP_AVAILABLE = "available";
     public static final String SERVICE_INSTANCE = "_nearbyapp";
     public static final String SERVICE_REG_TYPE = "_presence._tcp";
 
@@ -163,19 +165,17 @@ public class BroadcastService extends Service implements
             Log.d(TAG, "Connected as peer");
             Log.d("", "Connected as peer");
             Toast.makeText(getApplicationContext(), "Peer", Toast.LENGTH_SHORT).show();
-            // start new client socket  handler
         }
     }
 
     private void startRegistrationAndDiscovery() {
         Map<String, String> record = new HashMap<String, String>();
 
-        //record.put(TXTRECORD_PROP_AVAILABLE, "visible");
-
         record.put("RID", rID);
 
         Log.d("RECORD", record.toString());
 
+        //This is where we would also put the user's Matching data
         try {
             data.put("TYPE", "control");
             data.put("USER_NAME", UI_Shell.userName);
@@ -254,7 +254,7 @@ public class BroadcastService extends Service implements
                             Log.d("FOUND REGISTRATION ID", record.get("RID"));
                             //Send my userName to the found id
 
-                           GCMhandlerService.gcm.sendMessage(data.toString(), record.get("RID"));
+                           GCMstatic.gcm.sendMessage(data.toString(), record.get("RID"));
 
 
                        }

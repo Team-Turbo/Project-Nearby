@@ -8,8 +8,6 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.team1011.Database.Chat;
-import com.team1011.Database.ChatDataSource;
 import com.team1011.Database.Person;
 import com.team1011.Database.PersonDataSource;
 
@@ -30,10 +28,6 @@ public class GcmIntentService extends IntentService {
     private ArrayAdapter<Person> adapter;
 
     public PersonDataSource dataSource = new PersonDataSource(this);
-    public ChatDataSource cDataSource = new ChatDataSource(this);
-
-    public static ChatFragment chatFrag;
-
 
     public GcmIntentService() {
         super("GcmIntentService");
@@ -41,7 +35,7 @@ public class GcmIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d("ASDF", "onhandleIntent");
+
         Bundle extras = intent.getExtras();
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         // The getMessageType() intent parameter must be the intent you received
@@ -49,7 +43,6 @@ public class GcmIntentService extends IntentService {
         String messageType = gcm.getMessageType(intent);
 
         dataSource.open();
-        cDataSource.open();                     //Chats
         messages = dataSource.getAllPeople();  //Notifications
 
 
@@ -60,12 +53,11 @@ public class GcmIntentService extends IntentService {
              * any message types you're not interested in, or that you don't
              * recognize.
              */
-
-
-
             String msg = extras.get("text").toString();
             try {
                 JSONObject obj = new JSONObject(msg);
+
+                //Add discovered person to notifications
                 if (obj.get("TYPE").equals("control")) {
                     final Person person;
                     final String personUsrName;
@@ -79,7 +71,7 @@ public class GcmIntentService extends IntentService {
                         messages.add(person);
                 }
                 else {
-                    final Chat chat;
+                    //Send the received chat to the chatFragment
                     final String chatUsrname;
                     final String chatRegId;
                     final String chatmsg;
@@ -90,9 +82,7 @@ public class GcmIntentService extends IntentService {
 
                     Log.d("CHAT_RECEIVED", chatmsg);
 
-                  //  chat = cDataSource.createChat(chatUsrname, chatRegId, chatmsg);
-
-                    Intent sendIntent = new Intent("myBroadcastIntent");
+                    Intent sendIntent = new Intent("chatBroadcastIntent");
                     Bundle chatBundle = new Bundle();
                     chatBundle.putString("USER_NAME", chatUsrname);
                     chatBundle.putString("REG_ID", chatRegId);
@@ -100,21 +90,13 @@ public class GcmIntentService extends IntentService {
 
                     sendIntent.putExtras(chatBundle);
 
+                    //Send intent to be received by the chatFragment
                     LocalBroadcastManager.getInstance(this).sendBroadcast(sendIntent);
 
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
-            //messages.add(extras.get("text").toString());
-
-
-
-
-            for (int i = 0; i< messages.size(); i++)
-                Log.d("GCM Message received", messages.get(i).getPerson());
 
 
         }

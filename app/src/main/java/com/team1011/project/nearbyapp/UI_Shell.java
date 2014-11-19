@@ -71,9 +71,6 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ui_shell);
 
-        Intent GCMIntent = new Intent(this, GCMhandlerService.class);
-
-        startService(GCMIntent);
 
         //>> Setup: variables
         activeChatFrag = new ChatFragment(" ", " ");
@@ -82,7 +79,7 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.categories_drawer);
 
-        GCMhandlerService.gcm.registerInBackground(getApplicationContext());
+        GCMstatic.gcm.registerInBackground(getApplicationContext());
 
         //>> Setup: titles, texts and other arrays of data
         if (savedInstanceState != null) {

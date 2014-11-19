@@ -6,10 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +39,7 @@ public class ChatFragment extends Fragment {
     private JSONObject data = new JSONObject();
 
 
-    private String regID;
+    private String targetRegID;
     private String usrName;
 
     public ChatDataSource chatDataSource;
@@ -50,7 +48,7 @@ public class ChatFragment extends Fragment {
 
     public ChatFragment(String r, String u) {
 
-        regID = r;
+        targetRegID = r;
         usrName = u;
     }
 
@@ -58,32 +56,25 @@ public class ChatFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Make sure we only receive one message at a time
         if (!lock) {
             lock = true;
 
-
+            //Receive broadcast from the GCMintentService, update the chat UI with chat messages
             BroadcastReceiver receiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
 
                     Bundle bundle = intent.getExtras();
 
-
+                    //Push received message to the UI
                     pushMessage(bundle.getString("USER_NAME"), bundle.getString("REG_ID"), bundle.getString("MSG"));
 
-               /* adapter = new ChatMessageAdapter(getActivity(), android.R.id.text1,
-                        chats);
-
-                listView.setAdapter(adapter);
-
-                adapter.notifyDataSetChanged();*/
-
-                    Log.d("ASF", "RECEIVED BROACASTINTENT");
-                    // ... do something ...
                 }
             };
+            //Accept intents only with the "chatBroadcastIntent" filter
             LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
-                    .registerReceiver(receiver, new IntentFilter("myBroadcastIntent"));
+                    .registerReceiver(receiver, new IntentFilter("chatBroadcastIntent"));
 
         }
     }
@@ -95,22 +86,25 @@ public class ChatFragment extends Fragment {
         chatLine = (TextView) view.findViewById(R.id.txtChatLine);
         listView = (ListView) view.findViewById(android.R.id.list);
 
+        //Grab all chat messages you have with this person
         chatDataSource = new ChatDataSource(getActivity().getApplicationContext());
         chatDataSource.open();
-
         chats = chatDataSource.getChatsByUsrname(usrName);
 
+        //Set the adapter
         adapter = new ChatMessageAdapter(getActivity(), android.R.id.text1,
                 chats);
-
         listView.setAdapter(adapter);
+
+        //Set the send button listener
         view.findViewById(R.id.button1).setOnClickListener(
                 new View.OnClickListener() {
 
                     @Override
                     public void onClick(View arg0) {
-                        if (GCMhandlerService.gcm != null) {
+                        if (GCMstatic.gcm != null) {
                             try {
+                                //put the message into the JSON object to be sent over GCM
                                 data.put("TYPE", "chat");
                                 data.put("USER_NAME", UI_Shell.userName);
                                 data.put("REG_ID", UI_Shell.myRegID);
@@ -118,7 +112,11 @@ public class ChatFragment extends Fragment {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            GCMhandlerService.gcm.sendMessage(data.toString(), regID);
+
+                            //Send the message over GCM to the target registration ID
+                            GCMstatic.gcm.sendMessage(data.toString(), targetRegID);
+
+                            //Push my message to the Fragment
                             pushMessage(UI_Shell.userName, UI_Shell.myRegID, chatLine.getText().toString());
                             chatLine.setText("");
                             //chatLine.clearFocus();
@@ -131,22 +129,27 @@ public class ChatFragment extends Fragment {
         return view;
     }
 
-    public interface MessageTarget {
-        public Handler getHandler();
-    }
-
+    /**
+     * Push a message to the user interface
+     * @param usr user name to be displayed
+     * @param reg registration ID to be added to the database
+     * @param readMessage Message to be displayed
+     */
     public void pushMessage(String usr, String reg, String readMessage) {
         Chat chat = new Chat();
         chat.setMsg(readMessage);
         chat.setUserName(usr);
         chat.setRegID(reg);
-        chatDataSource.createChat(usr,reg, readMessage);
+        //Add to database
+        chatDataSource.createChat(usr, reg, readMessage);
+        //Add the chat to the adapter
         adapter.add(chat);
+        //Update the UI
         adapter.notifyDataSetChanged();
     }
 
     /**
-     * ArrayAdapter to manage chat messages.
+     * Format the messages
      */
     public class ChatMessageAdapter extends ArrayAdapter<Chat> {
 
