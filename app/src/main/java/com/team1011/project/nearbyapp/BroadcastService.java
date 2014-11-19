@@ -1,6 +1,5 @@
 package com.team1011.project.nearbyapp;
 
-import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +12,6 @@ import android.net.wifi.p2p.WifiP2pManager.DnsSdServiceResponseListener;
 import android.net.wifi.p2p.WifiP2pManager.DnsSdTxtRecordListener;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -290,7 +288,6 @@ public class BroadcastService extends Service implements
         });
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onDestroy() {
         Toast.makeText(this, "Broadcasting stopped", Toast.LENGTH_SHORT).show();
@@ -311,7 +308,7 @@ public class BroadcastService extends Service implements
             });
         }
 
-        mServiceLooper.quitSafely();
+        mServiceLooper.quit();
         super.onDestroy();
     }
 }

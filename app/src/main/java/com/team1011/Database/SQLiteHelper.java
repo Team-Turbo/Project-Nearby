@@ -28,7 +28,7 @@ public class SQLiteHelper
     static
     {
         DATABASE_NAME    = "people.db";
-        DATABASE_VERSION = 8;
+        DATABASE_VERSION = 9;
 
         TABLE_PEOPLE = "people";
         PERSON_ID = "_id";

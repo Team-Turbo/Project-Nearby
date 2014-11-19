@@ -28,6 +28,8 @@ public class CategoryFragment extends Fragment {
         RECEIVED, SENT
     }
 
+
+
     private RelativeLayout bgLayout;
     private TableLayout tableLayout;
 
@@ -35,7 +37,12 @@ public class CategoryFragment extends Fragment {
 
     private Category mCategory;
 
-    public CategoryFragment(int categoryNum, int sectionNumber) {
+    public CategoryFragment() {super();}
+
+
+
+
+    public void setArgs(int categoryNum, int sectionNumber) {
         id[0] = categoryNum;
         id[1] = sectionNumber;
     }

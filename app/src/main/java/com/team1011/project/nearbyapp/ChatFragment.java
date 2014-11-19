@@ -45,7 +45,9 @@ public class ChatFragment extends Fragment {
 
     private static boolean lock = false;
 
-    public ChatFragment(String r, String u) {
+    public ChatFragment() {super();}
+
+    public void setArgs(String r, String u) {
 
         targetRegID = r;
         usrName = u;
@@ -115,7 +117,7 @@ public class ChatFragment extends Fragment {
                             GCMstatic.gcm.sendMessage(data.toString(), targetRegID);
 
                             //Push my message to the Fragment
-                            pushMessage(UI_Shell.userName, Chat.TYPE_TO, chatLine.getText().toString());
+                            pushMessage(usrName, Chat.TYPE_TO, chatLine.getText().toString());
                             chatLine.setText("");
                             //chatLine.clearFocus();
                         }
@@ -175,12 +177,17 @@ public class ChatFragment extends Fragment {
 
                     if (nameText != null) {
                         nameText.setText(message);
+                        //User sends message
                         if (currChat.getType().equalsIgnoreCase(Chat.TYPE_TO)) {
                             nameText.setTextAppearance(getActivity(),
                                     R.style.normalText);
+
+                            nameText.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
+                        //Receive message
                         } else {
                             nameText.setTextAppearance(getActivity(),
                                     R.style.boldText);
+
                         }
                     }
                 }

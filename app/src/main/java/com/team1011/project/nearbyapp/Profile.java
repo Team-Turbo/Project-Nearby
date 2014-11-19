@@ -32,7 +32,8 @@ public class Profile extends Fragment {
     private TextView txtBday;
     private static boolean imageLock = false;
 
-    public Profile(String usrName, String dispName, String bDay, String imgUrl, String abtMe) {
+
+    public void setArgs(String usrName, String dispName, String bDay, String imgUrl, String abtMe) {
         userName = usrName;
         displayName = dispName;
         birthDay = bDay;

@@ -55,7 +55,7 @@ public class Chat
     @Override
     public String toString()
     {
-        if (type.equalsIgnoreCase(TYPE_TO))
+        if (type.equalsIgnoreCase(TYPE_FROM))
             return userName + ": " + msg;
         else
             return UI_Shell.userName + ": " + msg;

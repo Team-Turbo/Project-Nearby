@@ -124,7 +124,10 @@ public class Category_Shell extends Fragment
         {
             int[] fragID = {UI_Shell.getCurrentCategoryInt(), i};
 
-            return new CategoryFragment(fragID[0], fragID[1]);
+            CategoryFragment cf = new CategoryFragment();
+            cf.setArgs(fragID[0], fragID[1]);
+
+            return cf;
         }
 
         @Override

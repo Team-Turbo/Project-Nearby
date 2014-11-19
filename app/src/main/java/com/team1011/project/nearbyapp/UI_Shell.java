@@ -73,7 +73,7 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
 
 
         //>> Setup: variables
-        activeChatFrag = new ChatFragment(" ", " ");
+        activeChatFrag = new ChatFragment();
         final ActionBar mActionBar = getActionBar();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -149,10 +149,12 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
 
         //>> Set content
         setTitle(R.string.title_activity_profile);
+
+        Profile profile = new Profile();
+        profile.setArgs(userName, displayName, birthDay, imageUrl, aboutMe);
+
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_frame,
-                        new Profile(userName, displayName, birthDay, imageUrl, aboutMe))
-                .commit();
+                .replace(R.id.content_frame,profile).commit();
     }
 
     @Override
@@ -212,10 +214,10 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
             case R.id.action_profile:
                 setTitle(R.string.title_activity_profile);
                 mDrawerItemClickListener.clean();
+                Profile profile = new Profile();
+                profile.setArgs(userName, displayName, birthDay, imageUrl, aboutMe);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content_frame,
-                                new Profile(userName, displayName, birthDay, imageUrl, aboutMe))
-                        .commit();
+                        .replace(R.id.content_frame, profile).commit();
                 return true;
 
             case R.id.action_notification:
