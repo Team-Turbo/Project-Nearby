@@ -122,7 +122,7 @@ public class ChatFragment extends Fragment {
                 }
             });
 
-        getActivity().setTitle(usrName);
+        getActivity().setTitle(usrName.split("@")[0]);
 
         return view;
     }
