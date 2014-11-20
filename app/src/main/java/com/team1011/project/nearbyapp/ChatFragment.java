@@ -12,6 +12,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -98,6 +100,31 @@ public class ChatFragment extends Fragment {
                 chats);
 
         listView.setAdapter(adapter);
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                switch (scrollState) {
+                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+                        //List is idle
+                        break;
+                    case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
+                        //List is scrolling under the direct touch of the user
+                        InputMethodManager imm = (InputMethodManager) view.getContext()
+                                .getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        break;
+                    case AbsListView.OnScrollListener.SCROLL_STATE_FLING:
+                        //The user did a 'fling' on the list and it's still scrolling
+                        break;
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
 
         //Set the send button listener
         view.findViewById(R.id.button1).setOnClickListener( new View.OnClickListener() {
