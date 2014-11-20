@@ -29,7 +29,6 @@ public class CategoryFragment extends Fragment {
     }
 
 
-
     private RelativeLayout bgLayout;
     private TableLayout tableLayout;
 
@@ -87,8 +86,10 @@ public class CategoryFragment extends Fragment {
 
                     if (typeOfElement.equals("EditText")) {
                         processEditText(pairs.getKey());
-                    } else {
+                    } else if (typeOfElement.equals("List")) {
                         processList(pairs.getKey(), pairs.getValue());
+                    } else if (typeOfElement.equals("Radio")) {
+                        processRadio(pairs.getKey(), pairs.getValue());
                     }
                 }
                 break;
@@ -135,6 +136,11 @@ public class CategoryFragment extends Fragment {
 
     /* UI elements with choices, ex. for lists */
     private void processList(String key, LinkedList<String> choices) {
+
+    }
+
+    /* UI elements which choices, ex. for radio buttons */
+    private void processRadio(String key, LinkedList<String> choices) {
 
     }
 

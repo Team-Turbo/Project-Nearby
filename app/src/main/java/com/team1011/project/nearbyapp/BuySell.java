@@ -7,10 +7,47 @@ import java.util.Map;
  * Created by Thomas on 2014-11-12.
  */
 public class BuySell extends Category {
-    private String[] fields = {"Gender", "Age"};
+    private String[] fields = {"Item Category", "Buy Or Sell", "Price", "Offset"};
+    private String[] itemCat = {"Choices", "Phone", "Tool", "Appliance", "Furniture", "Clothing",
+            "Accessory", "Book", "Vehicle", "Electronics", "Sporting", "Toy/Game"};
+    private String[] bos = {"Radio", "Buying", "Selling"};
+    private String[] price = {"EditText"};
+    private String[] offset = {"EditText"};
+
+    public BuySell() {
+        Map<String, LinkedList<String>> m = this.getElements();
+        m.put(fields[0], toLinkedList(itemCat));
+        m.put(fields[1], toLinkedList(bos));
+        m.put(fields[2], toLinkedList(price));
+        m.put(fields[3], toLinkedList(offset));
+    }
 
     @Override
     public boolean compare(Map<String, LinkedList<String>> m1, Map<String, LinkedList<String>> m2) {
-        return false;
+        double price1, price2, offset1, offset2;
+        if (!(m1.get(fields[0]).get(0).equals(m2.get(fields[0]).get(0)))) {
+            return false;
+        }
+        if (m1.get(fields[1]).get(0).equals(m2.get(fields[1]).get(0))) {
+            return false;
+        }
+        try {
+            price1 = Double.parseDouble(m1.get(fields[2]).get(0));
+            price2 = Double.parseDouble(m2.get(fields[2]).get(0));
+            offset1 = Double.parseDouble(m1.get(fields[3]).get(0));
+            offset2 = Double.parseDouble(m2.get(fields[3]).get(0));
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        if (price2 >= price1) {
+            if (((price1 + offset1) < (price2 - offset2))) {
+                return false;
+            }
+        } else if (price1 >= price2) {
+            if (((price2 + offset2) < (price1 - offset1))) {
+                return false;
+            }
+        }
+        return true;
     }
 }
