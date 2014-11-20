@@ -109,7 +109,6 @@ public class NotificationFragment extends ListFragment {
             UI_Shell.activeChatFrag.setArgs(mAdapter.getItem(position).getRegID(),
                     mAdapter.getItem(position).getPerson());
 
-
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, UI_Shell.activeChatFrag).commit();
         }

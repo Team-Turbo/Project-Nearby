@@ -1,7 +1,5 @@
 package com.team1011.Database;
 
-import com.team1011.project.nearbyapp.UI_Shell;
-
 /**
  * Created by Filip on 2014-11-18.
  */
@@ -14,7 +12,6 @@ public class Chat
     private String userName;
     private String type;
     private String msg;
-
 
     public long getId()
     {
@@ -55,9 +52,6 @@ public class Chat
     @Override
     public String toString()
     {
-        if (type.equalsIgnoreCase(TYPE_FROM))
-            return userName + ": " + msg;
-        else
-            return UI_Shell.userName + ": " + msg;
+        return msg;
     }
 }

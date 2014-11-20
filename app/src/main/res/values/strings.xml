@@ -15,6 +15,6 @@
     <string name="title_devices">Near You</string>
 
     <string name="btn_send">Send</string>
-    <string name="txt_hint">Type Message</string>
+    <string name="txt_hint">Type message</string>
 
 </resources>

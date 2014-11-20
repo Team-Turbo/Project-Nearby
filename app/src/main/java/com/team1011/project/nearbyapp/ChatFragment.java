@@ -33,6 +33,7 @@ public class ChatFragment extends Fragment {
     private View view;
     private TextView chatLine;
     private ListView listView;
+    private TextView partnerName;
     public static ChatMessageAdapter adapter = null;
     private List<Chat> chats = new ArrayList<Chat>();
 
@@ -47,10 +48,12 @@ public class ChatFragment extends Fragment {
 
     public ChatFragment() {super();}
 
-    public void setArgs(String r, String u) {
-
+    public void setArgs(String r, String u)
+    {
         targetRegID = r;
         usrName = u;
+
+        partnerName.setText(u);
     }
 
     @Override
@@ -86,6 +89,7 @@ public class ChatFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_chat, container, false);
         chatLine = (TextView) view.findViewById(R.id.txtChatLine);
         listView = (ListView) view.findViewById(android.R.id.list);
+        partnerName = (TextView) view.findViewById(R.id.chat_PartnerName);
 
         //Grab all chat messages you have with this person
         chatDataSource = new ChatDataSource(getActivity().getApplicationContext());
@@ -176,18 +180,18 @@ public class ChatFragment extends Fragment {
                             .findViewById(android.R.id.text1);
 
                     if (nameText != null) {
+
                         nameText.setText(message);
+
                         //User sends message
                         if (currChat.getType().equalsIgnoreCase(Chat.TYPE_TO)) {
                             nameText.setTextAppearance(getActivity(),
                                     R.style.normalText);
-
                             nameText.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
                         //Receive message
                         } else {
                             nameText.setTextAppearance(getActivity(),
                                     R.style.boldText);
-
                         }
                     }
                 }
