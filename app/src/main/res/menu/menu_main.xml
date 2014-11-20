@@ -4,12 +4,12 @@
 
     <item android:id="@+id/action_profile"
         android:title=""
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_action_person"
         android:showAsAction="ifRoom" />
 
     <item android:id="@+id/action_notification"
         android:title=""
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_action_error"
         android:showAsAction="ifRoom" />
 
     <item android:id="@+id/broadcast"

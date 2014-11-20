@@ -3,12 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <!--
-        <item name="android:actionBarStyle">@style/MyActionBar</item>
-        <item name="android:actionBarTabTextStyle">@style/MyActionBarTabText</item>
-        <item name="android:actionMenuTextColor">@color/theme_txt</item>
-        <item name="android:actionBarTabStyle">@style/MyActionBarTabs</item>
-        -->
+        <item name="android:displayOptions">showHome|homeAsUp|showTitle</item>
+        <item name="android:icon">@android:color/transparent</item>
     </style>
 
     <!-- ActionBar styles -->

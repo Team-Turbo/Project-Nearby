@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -133,12 +132,8 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
 
         //>> Setup: action bar
         mActionBar.setDisplayShowTitleEnabled(true);
-
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
-
-        mActionBar.setIcon(
-                new ColorDrawable(getResources().getColor(android.R.color.transparent)));
 
         //>> Bundle stuff
         Intent intent = getIntent();
