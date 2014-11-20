@@ -33,7 +33,6 @@ public class ChatFragment extends Fragment {
     private View view;
     private TextView chatLine;
     private ListView listView;
-    private TextView partnerName;
     public static ChatMessageAdapter adapter = null;
     private List<Chat> chats = new ArrayList<Chat>();
 
@@ -52,8 +51,6 @@ public class ChatFragment extends Fragment {
     {
         targetRegID = r;
         usrName = u;
-
-        partnerName.setText(u);
     }
 
     @Override
@@ -89,7 +86,6 @@ public class ChatFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_chat, container, false);
         chatLine = (TextView) view.findViewById(R.id.txtChatLine);
         listView = (ListView) view.findViewById(android.R.id.list);
-        partnerName = (TextView) view.findViewById(R.id.chat_PartnerName);
 
         //Grab all chat messages you have with this person
         chatDataSource = new ChatDataSource(getActivity().getApplicationContext());
@@ -102,33 +98,31 @@ public class ChatFragment extends Fragment {
         listView.setAdapter(adapter);
 
         //Set the send button listener
-        view.findViewById(R.id.button1).setOnClickListener(
-                new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View arg0) {
-                        if (GCMstatic.gcm != null) {
-                            try {
-                                //put the message into the JSON object to be sent over GCM
-                                data.put("TYPE", "chat");
-                                data.put("USER_NAME", UI_Shell.userName);
-                                data.put("MESSAGE", chatLine.getText().toString());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                            //Send the message over GCM to the target registration ID
-                            GCMstatic.gcm.sendMessage(data.toString(), targetRegID);
-
-                            //Push my message to the Fragment
-                            pushMessage(usrName, Chat.TYPE_TO, chatLine.getText().toString());
-                            chatLine.setText("");
-                            //chatLine.clearFocus();
+        view.findViewById(R.id.button1).setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    if (GCMstatic.gcm != null) {
+                        try {
+                            //put the message into the JSON object to be sent over GCM
+                            data.put("TYPE", "chat");
+                            data.put("USER_NAME", UI_Shell.userName);
+                            data.put("MESSAGE", chatLine.getText().toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+
+                        //Send the message over GCM to the target registration ID
+                        GCMstatic.gcm.sendMessage(data.toString(), targetRegID);
+
+                        //Push my message to the Fragment
+                        pushMessage(usrName, Chat.TYPE_TO, chatLine.getText().toString());
+                        chatLine.setText("");
+                        //chatLine.clearFocus();
                     }
-                });
+                }
+            });
 
-
+        getActivity().setTitle(usrName);
 
         return view;
     }
