@@ -167,7 +167,7 @@ public class BroadcastService extends Service implements
     private void startRegistrationAndDiscovery() {
         Map<String, String> record = new HashMap<String, String>();
 
-        record.put("RID", rID);
+        record.put("RID", UI_Shell.myRegID);
 
         Log.d("RECORD", record.toString());
 
@@ -245,7 +245,7 @@ public class BroadcastService extends Service implements
                             String fullDomainName, Map<String, String> record,
                             WifiP2pDevice device) {
 
-                       if (record.containsKey("RID")  && record.get("RID")!= null) {
+                       if (record.containsKey("RID")) {
 
                             Log.d("FOUND REGISTRATION ID", record.get("RID"));
                             //Send my userName to the found id
