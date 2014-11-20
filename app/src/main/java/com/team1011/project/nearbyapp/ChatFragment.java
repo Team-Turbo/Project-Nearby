@@ -153,6 +153,8 @@ public class ChatFragment extends Fragment {
 
         getActivity().setTitle(usrName.split("@")[0]);
 
+        listView.setSelection(adapter.getCount() - 1);
+
         return view;
     }
 
