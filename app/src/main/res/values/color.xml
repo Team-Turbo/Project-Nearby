@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="theme_bg">#ff5cd900</color>
-    <color name="theme_txt">#ffddffda</color>
+    <color name="theme_bg">@android:color/holo_green_light</color>
+    <color name="theme_bg_darker">@android:color/holo_green_dark</color>
+    <color name="theme_txt">#ffe7ffdb</color>
 </resources>

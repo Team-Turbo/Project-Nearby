@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,7 @@ public class ChatFragment extends Fragment {
     private View view;
     private TextView chatLine;
     private ListView listView;
-    public static ChatMessageAdapter adapter = null;
+    public ChatMessageAdapter adapter = null;
     private List<Chat> chats = new ArrayList<Chat>();
 
     private JSONObject data = new JSONObject();
@@ -93,8 +94,9 @@ public class ChatFragment extends Fragment {
         chats = chatDataSource.getChatsByUsrname(usrName);
 
         //Set the adapter
-        adapter = new ChatMessageAdapter(getActivity(), android.R.id.text1,
+        adapter = new ChatMessageAdapter(getActivity(), R.layout.chat_list_item,
                 chats);
+
         listView.setAdapter(adapter);
 
         //Set the send button listener
@@ -159,33 +161,32 @@ public class ChatFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View v = convertView;
+            TextView v = (TextView)convertView;
             if (v == null) {
                 LayoutInflater vi = (LayoutInflater) getActivity()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = vi.inflate(android.R.layout.simple_list_item_1, null);
+                v = (TextView)vi.inflate(R.layout.chat_list_item, null);
             }
             if (chats != null) {
                 Chat currChat = chats.get(position);
                 String message = currChat.toString();
 
                 if (message != null && !message.isEmpty()) {
-                    TextView nameText = (TextView) v
-                            .findViewById(android.R.id.text1);
 
-                    if (nameText != null) {
+                    if (v != null) {
 
-                        nameText.setText(message);
+                        v.setText(message);
 
                         //User sends message
                         if (currChat.getType().equalsIgnoreCase(Chat.TYPE_TO)) {
-                            nameText.setTextAppearance(getActivity(),
+                            v.setTextAppearance(getActivity(),
                                     R.style.normalText);
-                            nameText.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
+                            v.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
                         //Receive message
-                        } else {
-                            nameText.setTextAppearance(getActivity(),
+                        } else if (currChat.getType().equalsIgnoreCase(Chat.TYPE_FROM)) {
+                            v.setTextAppearance(getActivity(),
                                     R.style.boldText);
+                            v.setGravity(Gravity.CENTER_VERTICAL);
                         }
                     }
                 }

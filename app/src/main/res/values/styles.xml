@@ -10,8 +10,8 @@
     <!-- ActionBar styles -->
     <style name="MyActionBar"
         parent="android:Widget.Holo.ActionBar">
-        <item name="android:background">@color/theme_bg</item>
         <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
+        <item name="android:background">@color/theme_bg</item>
     </style>
 
     <!-- ActionBar title text -->
@@ -30,15 +30,16 @@
     <style name="MyActionBarTabs"
         parent="android:Widget.Holo.ActionBar.TabView">
         <!-- tab indicator -->
+        <item name="android:background">@color/theme_bg_darker</item>
     </style>
 
     <style name="boldText">
-        <item name="android:textStyle">bold|italic</item>
-        <item name="android:textColor">#99CC00</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#ff000000</item>
     </style>
 
     <style name="normalText">
-        <item name="android:textStyle">normal</item>
+        <item name="android:textStyle">bold|italic</item>
         <item name="android:textColor">#33B5E5</item>
     </style>
 
