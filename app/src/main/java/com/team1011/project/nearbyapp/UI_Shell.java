@@ -8,7 +8,6 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -156,18 +155,26 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
         Profile profile = new Profile();
         profile.setArgs(userName, displayName, birthDay, imageUrl, aboutMe);
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_frame,profile).commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_frame,profile)
+                .commit();
     }
 
     @Override
     public void onBackPressed() {
-        FragmentManager fm = getSupportFragmentManager();
-
-        if (fm.getBackStackEntryCount() > 0) {
-            fm.popBackStack();
-        } else {
+        if (getActionBar().getTitle().equals(getResources().getString(R.string.title_activity_profile))) {
             super.onBackPressed();
+        } else {
+            setTitle(R.string.title_activity_profile);
+
+            Profile profile = new Profile();
+            profile.setArgs(userName, displayName, birthDay, imageUrl, aboutMe);
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.content_frame,profile)
+                    .commit();
         }
     }
 
@@ -236,15 +243,15 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
                 Profile profile = new Profile();
                 profile.setArgs(userName, displayName, birthDay, imageUrl, aboutMe);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content_frame, profile).commit();
+                        .replace(R.id.content_frame, profile)
+                        .commit();
                 return true;
 
             case R.id.action_notification:
                 setTitle(R.string.title_activity_notifications);
                 mDrawerItemClickListener.clean();
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content_frame,
-                               new NotificationFragment())
+                        .replace(R.id.content_frame, new NotificationFragment())
                         .commit();
                 return true;
 
@@ -322,11 +329,9 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             currCategory = position;
 
-            if (prevPos != position) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content_frame, new Category_Shell())
-                        .commit();
-            }
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, new Category_Shell())
+                    .commit();
 
             // Highlight the selected item, update the title, and close the drawer
             mDrawerList.setItemChecked(position, true);

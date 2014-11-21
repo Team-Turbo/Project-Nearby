@@ -104,11 +104,19 @@ public class Category_Shell extends Fragment
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-
+    public void onDestroyView() {
         mActionBar.removeAllTabs();
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDetach() {
+        mActionBar.removeAllTabs();
+        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+
+        super.onDetach();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

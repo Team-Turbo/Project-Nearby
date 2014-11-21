@@ -28,18 +28,12 @@ public class CategoryFragment extends Fragment {
         RECEIVED, SENT
     }
 
-
     private RelativeLayout bgLayout;
     private TableLayout tableLayout;
 
     private int[] id = new int[2];
 
     private Category mCategory;
-
-    public CategoryFragment() {super();}
-
-
-
 
     public void setArgs(int categoryNum, int sectionNumber) {
         id[0] = categoryNum;
