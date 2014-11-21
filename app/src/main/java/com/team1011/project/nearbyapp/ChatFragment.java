@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -181,13 +180,11 @@ public class ChatFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch(item.getItemId()) {
             case R.id.delete:
-                Log.d("menuClick", "DELETE");
                 chatDataSource.deleteSingleChat(usrName, info.position);
                 adapter.remove(adapter.getItem(info.position));
                 adapter.notifyDataSetChanged();
                 return true;
             case R.id.delete_all:
-                Log.d("menuClick", "DELETE_ALL");
                 chatDataSource.deleteAllChat(usrName);
                 adapter.clear();
                 adapter.notifyDataSetChanged();
