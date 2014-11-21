@@ -68,6 +68,11 @@ public class GcmIntentService extends IntentService {
                     personUsrName = obj.get("USER_NAME").toString();
                     personRegId = obj.get("REG_ID").toString();
 
+                    if (!UI_Shell.runnnnnnnin) {
+                        notification = new Notifications(getApplicationContext());
+                        notification.notify(getApplicationContext(),personUsrName, "New Match", personUsrName, personRegId);
+                    }
+
                     person = dataSource.createPerson(personUsrName, personRegId);
 
                     if (person != null)
