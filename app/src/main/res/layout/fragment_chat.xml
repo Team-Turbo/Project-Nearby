@@ -9,22 +9,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:transcriptMode="alwaysScroll"
-        android:layout_above="@+id/linearLayout"
         android:divider="#0000"
-        android:dividerHeight="0dp">
-
-        <!-- Preview: listitem=@android:layout/simple_list_item_1 -->
-
+        android:dividerHeight="0dp"
+        android:layout_above="@+id/sep_hor_1">
     </ListView>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dip"
         android:background="@color/separator"
-        android:layout_alignBottom="@android:id/list"
-        android:layout_alignParentStart="true"
         android:id="@+id/sep_hor_1"
-        android:layout_alignParentEnd="true" />
+        android:layout_above="@+id/linearLayout"
+        android:layout_alignParentStart="true" />
 
     <RelativeLayout
         android:layout_width="match_parent"
