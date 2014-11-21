@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.team1011.Database.Chat;
+import com.team1011.Database.ChatDataSource;
 import com.team1011.Database.Person;
 import com.team1011.Database.PersonDataSource;
 
@@ -29,6 +30,7 @@ public class GcmIntentService extends IntentService {
     private ArrayAdapter<Person> adapter;
 
     public PersonDataSource dataSource = new PersonDataSource(this);
+    public ChatDataSource chatDataSource = new ChatDataSource(this);
 
     public Notifications notification;
 
@@ -46,6 +48,7 @@ public class GcmIntentService extends IntentService {
         String messageType = gcm.getMessageType(intent);
 
         dataSource.open();
+        chatDataSource.open();
         messages = dataSource.getAllPeople();  //Notifications
 
 
@@ -102,6 +105,8 @@ public class GcmIntentService extends IntentService {
                         notification = new Notifications(getApplicationContext());
                         Notifications.notify(getApplicationContext(), chatUsrname + ": " + chatmsg, "New chat", chatUsrname, regid);
                     }
+
+                    chatDataSource.createChat(chatUsrname, Chat.TYPE_FROM, chatmsg);
 
                     //Send intent to be received by the chatFragment
                     LocalBroadcastManager.getInstance(this).sendBroadcast(sendIntent);

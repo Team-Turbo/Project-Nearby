@@ -151,6 +151,8 @@ public class ChatFragment extends Fragment {
                         //Send the message over GCM to the target registration ID
                         GCMstatic.gcm.sendMessage(data.toString(), targetRegID);
 
+                        chatDataSource.createChat(usrName, Chat.TYPE_TO, chatLine.getText().toString());
+
                         //Push my message to the Fragment
                         pushMessage(usrName, Chat.TYPE_TO, chatLine.getText().toString());
                         chatLine.setText("");
@@ -207,7 +209,7 @@ public class ChatFragment extends Fragment {
         chat.setType(type);
         //Add to database
 
-        chatDataSource.createChat(usr, type, readMessage);
+
         //Add the chat to the adapter
         if (usr.equalsIgnoreCase(usrName)) {
             adapter.add(chat);
