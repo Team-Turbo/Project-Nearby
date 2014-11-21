@@ -28,6 +28,8 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
 
     public static ChatFragment activeChatFrag;
 
+    public static boolean runnnnnnnin = false;
+
     // Current action bar title
     private static CharSequence mTitle;
 
@@ -70,6 +72,8 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ui_shell);
+
+        runnnnnnnin = true;
 
         //>> Setup: variables
         final ActionBar mActionBar = getActionBar();
@@ -188,7 +192,23 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
 
     @Override
     public void onDestroy() {
+
+        runnnnnnnin = false;
         super.onDestroy();
+    }
+
+    @Override
+    public void onPause() {
+
+        runnnnnnnin = false;
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+
+        runnnnnnnin = true;
+        super.onResume();
     }
 
     @Override

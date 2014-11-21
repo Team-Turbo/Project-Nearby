@@ -77,9 +77,11 @@ public class GcmIntentService extends IntentService {
                     //Send the received chat to the chatFragment
                     final String chatUsrname;
                     final String chatmsg;
+                    final String regid;
 
                     chatUsrname = obj.get("USER_NAME").toString();
                     chatmsg = obj.get("MESSAGE").toString();
+                    regid = obj.get("REG_ID").toString();
 
                     Log.d("CHAT_RECEIVED", chatmsg);
 
@@ -91,8 +93,10 @@ public class GcmIntentService extends IntentService {
 
                     sendIntent.putExtras(chatBundle);
 
-                    notification = new Notifications(getApplicationContext());
-                    notification.notify(getApplicationContext(), chatUsrname + ": " + chatmsg, "New Chat");
+                    if (!UI_Shell.runnnnnnnin) {
+                        notification = new Notifications(getApplicationContext());
+                        notification.notify(getApplicationContext(), chatUsrname + ": " + chatmsg, "New Chat", chatUsrname, regid);
+                    }
 
                     //Send intent to be received by the chatFragment
                     LocalBroadcastManager.getInstance(this).sendBroadcast(sendIntent);

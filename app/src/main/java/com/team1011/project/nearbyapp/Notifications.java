@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 /**
  * Created by Filip on 2014-11-20.
@@ -18,13 +19,17 @@ public class Notifications {
         this.mContext = context;
     }
 
-    public static void notify(Context context, String message, String  action) {
+    public static void notify(Context context, String message, String  action, String from, String regid) {
 
         Notification myNotification;
         NotificationManager notificationManager;
 
 
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+        Bundle bundle = new Bundle();
+        bundle.putString("FROM", from);
+        bundle.putString("RID", regid);
+        launchIntent.putExtras(bundle);
 
         if(action != null && launchIntent != null){
             launchIntent.setAction(action);

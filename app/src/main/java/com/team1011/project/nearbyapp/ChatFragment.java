@@ -135,6 +135,7 @@ public class ChatFragment extends Fragment {
                             //put the message into the JSON object to be sent over GCM
                             data.put("TYPE", "chat");
                             data.put("USER_NAME", UI_Shell.userName);
+                            data.put("REG_ID", UI_Shell.myRegID);
                             data.put("MESSAGE", chatLine.getText().toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -170,11 +171,14 @@ public class ChatFragment extends Fragment {
         chat.setUserName(usr);
         chat.setType(type);
         //Add to database
+
         chatDataSource.createChat(usr, type, readMessage);
         //Add the chat to the adapter
-        adapter.add(chat);
-        //Update the UI
-        adapter.notifyDataSetChanged();
+        if (usr.equalsIgnoreCase(usrName)) {
+            adapter.add(chat);
+            //Update the UI
+            adapter.notifyDataSetChanged();
+        }
     }
 
     /**
