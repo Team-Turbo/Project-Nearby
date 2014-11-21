@@ -17,4 +17,7 @@
     <string name="btn_send">Send</string>
     <string name="txt_hint">Type message</string>
 
+    <string name="menu_delete">Delete</string>
+    <string name="menu_delete_all">Delete all</string>
+
 </resources>

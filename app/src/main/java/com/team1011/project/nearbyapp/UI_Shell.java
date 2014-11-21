@@ -21,7 +21,7 @@ import android.widget.ListView;
  *
  * The app's UI shell. It's the activity that the fragments will live in.
  */
-public class UI_Shell extends FragmentActivity implements NotificationFragment.OnFragmentInteractionListener
+public class UI_Shell extends FragmentActivity
 {
     public static final String KEY_STATE_TITLE = "state_title";
 
@@ -150,8 +150,6 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
         imageUrl = imageUrl.substring(0, imageUrl.length() - 2) + 400;
 
         //>> Set content
-        setTitle(R.string.title_activity_profile);
-
         Profile profile = new Profile();
         profile.setArgs(userName, displayName, birthDay, imageUrl, aboutMe);
 
@@ -164,10 +162,11 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
     @Override
     public void onBackPressed() {
         if (getActionBar().getTitle().equals(getResources().getString(R.string.title_activity_profile))) {
-            super.onBackPressed();
+            Intent startMain = new Intent(Intent.ACTION_MAIN);
+            startMain.addCategory(Intent.CATEGORY_HOME);
+            startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(startMain);
         } else {
-            setTitle(R.string.title_activity_profile);
-
             Profile profile = new Profile();
             profile.setArgs(userName, displayName, birthDay, imageUrl, aboutMe);
 
@@ -198,24 +197,21 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
     }
 
     @Override
-    public void onDestroy() {
-
-        runnnnnnnin = false;
-        super.onDestroy();
+    public void onResume() {
+        super.onResume();
+        runnnnnnnin = true;
     }
 
     @Override
     public void onPause() {
-
         runnnnnnnin = false;
         super.onPause();
     }
 
     @Override
-    public void onResume() {
-
-        runnnnnnnin = true;
-        super.onResume();
+    public void onDestroy() {
+        runnnnnnnin = false;
+        super.onDestroy();
     }
 
     @Override
@@ -238,7 +234,6 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
         switch (item.getItemId())
         {
             case R.id.action_profile:
-                setTitle(R.string.title_activity_profile);
                 mDrawerItemClickListener.clean();
                 Profile profile = new Profile();
                 profile.setArgs(userName, displayName, birthDay, imageUrl, aboutMe);
@@ -248,7 +243,6 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
                 return true;
 
             case R.id.action_notification:
-                setTitle(R.string.title_activity_notifications);
                 mDrawerItemClickListener.clean();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame, new NotificationFragment())
@@ -303,11 +297,6 @@ public class UI_Shell extends FragmentActivity implements NotificationFragment.O
     public void setTitle(CharSequence title) {
         mTitle = title;
         getActionBar().setTitle(mTitle);
-    }
-
-    @Override
-    public void onFragmentInteraction(String id) {
-
     }
 
     private void updateBroadcastMenuItem(boolean broadcastEnabled) {

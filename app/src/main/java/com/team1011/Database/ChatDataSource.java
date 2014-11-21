@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Filip on 2014-11-18.
@@ -82,20 +83,27 @@ public class ChatDataSource {
 
     }
 
-    public void deleteChat(final Chat chat)
+    public void deleteSingleChat(String u, int position)
     {
-        final long id;
+        /*
+        DELETE FROM TABLE_CHAT
+        WHERE CHAT_ID in (
+            SELECT CHAT_ID FROM TABLE_CHAT LIMIT 1 OFFSET position
+            WHERE COLUMN_USERNAME_TO = u
+        )
+        */
+    }
 
-        id = chat.getId();
-        System.out.println("Comment deleted with id: " + id);
+    public void deleteAllChat(String u)
+    {
         database.delete(SQLiteHelper.TABLE_CHAT,
-                SQLiteHelper.CHAT_ID + " = " + id,
+                SQLiteHelper.COLUMN_USERNAME_TO + " = \"" + u + "\"",
                 null);
     }
 
-    public ArrayList<Chat> getChatsByUsrname(String u)
+    public List<Chat> getChatsByUsrname(String u)
     {
-        final ArrayList<Chat> chats;
+        final List<Chat> chats;
         final Cursor cursor;
 
         chats = new ArrayList<Chat>();

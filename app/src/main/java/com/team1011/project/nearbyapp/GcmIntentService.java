@@ -70,7 +70,7 @@ public class GcmIntentService extends IntentService {
 
                     if (!UI_Shell.runnnnnnnin) {
                         notification = new Notifications(getApplicationContext());
-                        notification.notify(getApplicationContext(),personUsrName, "New Match", personUsrName, personRegId);
+                        Notifications.notify(getApplicationContext(),personUsrName, "New match", personUsrName, personRegId);
                     }
 
                     person = dataSource.createPerson(personUsrName, personRegId);
@@ -100,7 +100,7 @@ public class GcmIntentService extends IntentService {
 
                     if (!UI_Shell.runnnnnnnin) {
                         notification = new Notifications(getApplicationContext());
-                        notification.notify(getApplicationContext(), chatUsrname + ": " + chatmsg, "New Chat", chatUsrname, regid);
+                        Notifications.notify(getApplicationContext(), chatUsrname + ": " + chatmsg, "New chat", chatUsrname, regid);
                     }
 
                     //Send intent to be received by the chatFragment

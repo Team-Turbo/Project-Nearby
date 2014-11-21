@@ -78,11 +78,11 @@ public class CategoryFragment extends Fragment {
 
                     String typeOfElement = pairs.getValue().getFirst();
 
-                    if (typeOfElement.equals("EditText")) {
+                    if (typeOfElement.equals(Category.type.EDITTEXT)) {
                         processEditText(pairs.getKey());
-                    } else if (typeOfElement.equals("List")) {
-                        processList(pairs.getKey(), pairs.getValue());
-                    } else if (typeOfElement.equals("Radio")) {
+                    } else if (typeOfElement.equals(Category.type.CHOICE)) {
+                        processChoice(pairs.getKey(), pairs.getValue());
+                    } else if (typeOfElement.equals(Category.type.RADIO)) {
                         processRadio(pairs.getKey(), pairs.getValue());
                     }
                 }
@@ -129,7 +129,7 @@ public class CategoryFragment extends Fragment {
     }
 
     /* UI elements with choices, ex. for lists */
-    private void processList(String key, LinkedList<String> choices) {
+    private void processChoice(String key, LinkedList<String> choices) {
 
     }
 
@@ -137,12 +137,5 @@ public class CategoryFragment extends Fragment {
     private void processRadio(String key, LinkedList<String> choices) {
 
     }
-
-    // TODO: put below methods into the Category class
-    /*
-    public abstract String getNotificationText(textType tt);
-
-    public abstract void setValue(String key, String value);
-    */
 
 }

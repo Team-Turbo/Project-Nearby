@@ -8,13 +8,19 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -88,7 +94,8 @@ public class ChatFragment extends Fragment {
             Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_chat, container, false);
         chatLine = (TextView) view.findViewById(R.id.txtChatLine);
-        listView = (ListView) view.findViewById(android.R.id.list);
+        listView = (ListView) view.findViewById(R.id.chat_list);
+        registerForContextMenu(listView);
 
         //Grab all chat messages you have with this person
         chatDataSource = new ChatDataSource(getActivity().getApplicationContext());
@@ -127,10 +134,11 @@ public class ChatFragment extends Fragment {
         });
 
         //Set the send button listener
-        view.findViewById(R.id.button1).setOnClickListener( new View.OnClickListener() {
+        view.findViewById(R.id.chat_send_button).setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
-                    if (GCMstatic.gcm != null) {
+                    if (GCMstatic.gcm != null
+                            && ((EditText)view.findViewById(R.id.txtChatLine)).getText().toString().trim().length() > 0) {
                         try {
                             //put the message into the JSON object to be sent over GCM
                             data.put("TYPE", "chat");
@@ -157,6 +165,36 @@ public class ChatFragment extends Fragment {
         listView.setSelection(adapter.getCount() - 1);
 
         return view;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId()==R.id.chat_list) {
+            MenuInflater inflater = getActivity().getMenuInflater();
+            inflater.inflate(R.menu.menu_chat_list, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch(item.getItemId()) {
+            case R.id.delete:
+                Log.d("menuClick", "DELETE");
+                chatDataSource.deleteSingleChat(usrName, info.position);
+                adapter.remove(adapter.getItem(info.position));
+                adapter.notifyDataSetChanged();
+                return true;
+            case R.id.delete_all:
+                Log.d("menuClick", "DELETE_ALL");
+                chatDataSource.deleteAllChat(usrName);
+                adapter.clear();
+                adapter.notifyDataSetChanged();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     /**

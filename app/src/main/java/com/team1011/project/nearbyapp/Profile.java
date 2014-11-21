@@ -72,6 +72,13 @@ public class Profile extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        getActivity().setTitle(R.string.title_activity_profile);
+    }
+
     /**
      * Background Async task to load user profile picture from url
      * */
