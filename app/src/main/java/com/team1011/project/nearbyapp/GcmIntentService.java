@@ -30,6 +30,8 @@ public class GcmIntentService extends IntentService {
 
     public PersonDataSource dataSource = new PersonDataSource(this);
 
+    public Notifications notification;
+
     public GcmIntentService() {
         super("GcmIntentService");
     }
@@ -89,8 +91,13 @@ public class GcmIntentService extends IntentService {
 
                     sendIntent.putExtras(chatBundle);
 
+                    notification = new Notifications(getApplicationContext());
+                    notification.notify(getApplicationContext(), chatUsrname + ": " + chatmsg, "New Chat");
+
                     //Send intent to be received by the chatFragment
                     LocalBroadcastManager.getInstance(this).sendBroadcast(sendIntent);
+
+
 
                 }
             } catch (JSONException e) {
