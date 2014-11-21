@@ -18,7 +18,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:contentDescription="Profile Picture" />
 
     <TableLayout
         android:layout_width="269dp"
@@ -70,7 +71,6 @@
         android:layout_width="wrap_content"
         android:layout_height="200dp"
         android:inputType="textMultiLine"
-        android:gravity="start"
         android:textAlignment="viewStart"
         android:ems="10"
         android:id="@+id/aboutTxt"
@@ -80,6 +80,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/tableLayout"
-        android:text="Write something about you" />
+        android:text="Write something about you"
+        android:gravity="bottom" />
 
 </RelativeLayout>

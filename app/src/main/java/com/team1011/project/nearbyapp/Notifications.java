@@ -24,7 +24,6 @@ public class Notifications {
         Notification myNotification;
         NotificationManager notificationManager;
 
-
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
         Bundle bundle = new Bundle();
         bundle.putString("FROM", from);
@@ -40,6 +39,7 @@ public class Notifications {
         myNotification = new Notification.Builder(context)
                 .setContentTitle(action)
                 .setContentText(message)
+                .setTicker(message)
                 .setWhen(System.currentTimeMillis())
                 .setContentIntent(pendingIntent)
                 .setDefaults(Notification.DEFAULT_ALL)

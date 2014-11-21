@@ -10,6 +10,13 @@ import java.util.Map;
  * Created by Thomas on 2014-11-12.
  */
 public abstract class Category {
+
+    public static class type {
+        public static final String EDITTEXT = "EditText";
+        public static final String CHOICE = "Choice";
+        public static final String RADIO = "Radio";
+    }
+
     private Map<String, LinkedList<String>> elements = new HashMap<String, LinkedList<String>>();
     private String[] fields;
 
