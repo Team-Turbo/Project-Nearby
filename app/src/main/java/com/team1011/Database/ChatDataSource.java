@@ -83,7 +83,7 @@ public class ChatDataSource {
 
     }
 
-    public void deleteSingleChat(String u, int position)
+  /*  public void deleteSingleChat(String u, int position)
     {
         /*
         DELETE FROM TABLE_CHAT
@@ -91,7 +91,18 @@ public class ChatDataSource {
             SELECT CHAT_ID FROM TABLE_CHAT LIMIT 1 OFFSET position
             WHERE COLUMN_USERNAME_TO = u
         )
-        */
+
+    }*/
+
+    public void deleteSingleChat(final Chat chat)
+    {
+        final long id;
+
+        id = chat.getId();
+        System.out.println("Comment deleted with id: " + id);
+        database.delete(SQLiteHelper.TABLE_CHAT,
+                SQLiteHelper.CHAT_ID + " = " + id,
+                null);
     }
 
     public void deleteAllChat(String u)

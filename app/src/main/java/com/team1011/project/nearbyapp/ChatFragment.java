@@ -182,7 +182,7 @@ public class ChatFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch(item.getItemId()) {
             case R.id.delete:
-                chatDataSource.deleteSingleChat(usrName, info.position);
+                chatDataSource.deleteSingleChat(chats.get(info.position));
                 adapter.remove(adapter.getItem(info.position));
                 adapter.notifyDataSetChanged();
                 return true;
