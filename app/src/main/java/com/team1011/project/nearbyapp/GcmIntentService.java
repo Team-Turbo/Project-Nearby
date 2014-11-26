@@ -50,6 +50,7 @@ public class GcmIntentService extends IntentService {
         dataSource.open();
         chatDataSource.open();
         messages = dataSource.getAllPeople();  //Notifications
+        final Person person;
 
 
         if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
@@ -65,16 +66,16 @@ public class GcmIntentService extends IntentService {
 
                 //Add discovered person to notifications
                 if (obj.get("TYPE").equals("control")) {
-                    final Person person;
+
                     final String personUsrName;
                     final String personRegId;
                     personUsrName = obj.get("USER_NAME").toString();
                     personRegId = obj.get("REG_ID").toString();
 
-                    if (!UI_Shell.runnnnnnnin) {
-                        notification = new Notifications(getApplicationContext());
-                        Notifications.notify(getApplicationContext(),personUsrName, "New match", personUsrName, personRegId);
-                    }
+
+                    notification = new Notifications(getApplicationContext());
+                    Notifications.notify(getApplicationContext(),personUsrName, "New match", personUsrName, personRegId);
+
 
                     person = dataSource.createPerson(personUsrName, personRegId);
 
@@ -104,6 +105,13 @@ public class GcmIntentService extends IntentService {
                     if (!UI_Shell.runnnnnnnin) {
                         notification = new Notifications(getApplicationContext());
                         Notifications.notify(getApplicationContext(), chatUsrname + ": " + chatmsg, "New chat", chatUsrname, regid);
+                    }
+
+                    if (!messages.contains(new Person(chatUsrname, regid))) {
+                        person = dataSource.createPerson(chatUsrname, regid);
+                        Notifications.notify(getApplicationContext(),chatUsrname, "New match", chatUsrname, regid);
+                        if (person != null)
+                            messages.add(person);
                     }
 
                     chatDataSource.createChat(chatUsrname, Chat.TYPE_FROM, chatmsg);

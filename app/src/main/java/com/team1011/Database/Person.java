@@ -9,6 +9,14 @@ public class Person {
     private String person;
     private String regID;
 
+    public Person(){}
+
+    public Person(String p, String r) {
+        person = p;
+        regID = r;
+    }
+
+
     public long getId()
     {
         return (id);
