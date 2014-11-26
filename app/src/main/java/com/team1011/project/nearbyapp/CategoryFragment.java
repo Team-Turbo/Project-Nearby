@@ -7,8 +7,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -80,7 +84,7 @@ public class CategoryFragment extends Fragment {
 
                     if (typeOfElement.equals(Category.type.EDITTEXT)) {
                         processEditText(pairs.getKey());
-                    } else if (typeOfElement.equals(Category.type.CHOICE)) {
+                    } else if (typeOfElement.equals(Category.type.CHOICES)) {
                         processChoice(pairs.getKey(), pairs.getValue());
                     } else if (typeOfElement.equals(Category.type.RADIO)) {
                         processRadio(pairs.getKey(), pairs.getValue());
@@ -130,12 +134,50 @@ public class CategoryFragment extends Fragment {
 
     /* UI elements with choices, ex. for lists */
     private void processChoice(String key, LinkedList<String> choices) {
+        TableRow tr = new TableRow(getActivity());
+        TextView tv = new TextView(getActivity());
+        Spinner spinner = new Spinner(getActivity());
 
+        tv.setTextAppearance(getActivity(), R.style.catui_identifier);
+        tv.setGravity(Gravity.END);
+
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
+                getActivity(),
+                android.R.layout.simple_spinner_item);
+        adapter.addAll(choices.subList(1,choices.size()));
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        tv.setText(key + ": ");
+
+        tr.addView(tv);
+        tr.addView(spinner);
+
+        tableLayout.addView(tr);
     }
 
     /* UI elements which choices, ex. for radio buttons */
     private void processRadio(String key, LinkedList<String> choices) {
+        TableRow tr = new TableRow(getActivity());
+        TextView tv = new TextView(getActivity());
+        RadioGroup rg = new RadioGroup(getActivity());
 
+        tv.setTextAppearance(getActivity(), R.style.catui_identifier);
+        tv.setGravity(Gravity.END);
+
+        for (int s = 1; s < choices.size(); ++s)
+        {
+            RadioButton rb = new RadioButton(getActivity());
+            rb.setText(choices.get(s));
+            rg.addView(new RadioButton(getActivity()));
+        }
+
+        tv.setText(key + ": ");
+
+        tr.addView(tv);
+        tr.addView(rg);
+
+        tableLayout.addView(tr);
     }
 
 }

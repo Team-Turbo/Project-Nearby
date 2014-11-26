@@ -13,7 +13,7 @@ public abstract class Category {
 
     public static class type {
         public static final String EDITTEXT = "EditText";
-        public static final String CHOICE = "Choice";
+        public static final String CHOICES = "Choices";
         public static final String RADIO = "Radio";
     }
 
