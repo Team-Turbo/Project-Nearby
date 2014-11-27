@@ -128,6 +128,26 @@ public class PersonDataSource {
         return (people);
     }
 
+    public boolean exists(String s) {
+
+        final Cursor cursor;
+
+        cursor = database.query(SQLiteHelper.TABLE_PEOPLE,
+                allColumns,
+                SQLiteHelper.COLUMN_PERSON + " = \"" + s + "\"",
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        if (cursor.getCount() >= 1 )
+            return true;
+        else
+            return false;
+
+    }
+
     private Person cursorToPerson(final Cursor cursor)
     {
         final Person person;

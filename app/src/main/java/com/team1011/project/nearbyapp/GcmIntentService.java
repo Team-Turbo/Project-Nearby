@@ -107,7 +107,7 @@ public class GcmIntentService extends IntentService {
                         Notifications.notify(getApplicationContext(), chatUsrname + ": " + chatmsg, "New chat", chatUsrname, regid);
                     }
 
-                    if (!messages.contains(new Person(chatUsrname, regid))) {
+                    if (!dataSource.exists(chatUsrname)) {
                         person = dataSource.createPerson(chatUsrname, regid);
                         Notifications.notify(getApplicationContext(),chatUsrname, "New match", chatUsrname, regid);
                         if (person != null)
