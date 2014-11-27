@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -165,11 +166,12 @@ public class CategoryFragment extends Fragment {
         tv.setTextAppearance(getActivity(), R.style.catui_identifier);
         tv.setGravity(Gravity.END);
 
+        rg.setOrientation(LinearLayout.HORIZONTAL);
         for (int s = 1; s < choices.size(); ++s)
         {
             RadioButton rb = new RadioButton(getActivity());
             rb.setText(choices.get(s));
-            rg.addView(new RadioButton(getActivity()));
+            rg.addView(rb);
         }
 
         tv.setText(key + ": ");
