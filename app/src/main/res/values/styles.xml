@@ -51,4 +51,10 @@
         <item name="android:textSize">@dimen/catui_txtSize</item>
     </style>
 
+    <style name="catui_edittext_text">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#ff1e1e1e</item>
+        <item name="android:textSize">@dimen/catui_txtSize</item>
+    </style>
+
 </resources>

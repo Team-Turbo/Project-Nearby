@@ -29,10 +29,6 @@ import java.util.Map;
  */
 public class CategoryFragment extends Fragment {
 
-    enum textType {
-        RECEIVED, SENT
-    }
-
     private RelativeLayout bgLayout;
     private TableLayout tableLayout;
 
@@ -59,13 +55,9 @@ public class CategoryFragment extends Fragment {
 
         bgLayout.setBackgroundColor(
                 Color.rgb(
-                        (int) (Math.random() * 225),
-                        (int) (Math.random() * 225),
-                        (int) (Math.random() * 225)
+                        255, 105, 180
                 )
         );
-
-        //tableLayout.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
         setCategory(id[0]);
 
@@ -116,15 +108,16 @@ public class CategoryFragment extends Fragment {
     /* UI elements with no choices */
     private void processEditText(String key) {
         TableRow tr = new TableRow(getActivity());
+
         TextView tv = new TextView(getActivity());
-        EditText et = new EditText(getActivity());
-
         tv.setTextAppearance(getActivity(), R.style.catui_identifier);
-        tv.setGravity(Gravity.END);
-        et.setTextAppearance(getActivity(), R.style.catui_identifier);
-        et.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
+        tv.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
         tv.setText(key + ": ");
+
+        EditText et = new EditText(getActivity());
+        et.setTextAppearance(getActivity(), R.style.catui_edittext_text);
+        et.setBackgroundResource(android.R.drawable.editbox_background);
+        et.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         tr.addView(tv);
         tr.addView(et);
@@ -135,20 +128,19 @@ public class CategoryFragment extends Fragment {
     /* UI elements with choices, ex. for lists */
     private void processChoice(String key, LinkedList<String> choices) {
         TableRow tr = new TableRow(getActivity());
+
         TextView tv = new TextView(getActivity());
-        Spinner spinner = new Spinner(getActivity());
-
         tv.setTextAppearance(getActivity(), R.style.catui_identifier);
-        tv.setGravity(Gravity.END);
+        tv.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
+        tv.setText(key + ": ");
 
+        Spinner spinner = new Spinner(getActivity());
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
                 getActivity(),
                 android.R.layout.simple_spinner_item);
         adapter.addAll(choices.subList(1,choices.size()));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
-        tv.setText(key + ": ");
 
         tr.addView(tv);
         tr.addView(spinner);
@@ -159,26 +151,25 @@ public class CategoryFragment extends Fragment {
     /* UI elements which choices, ex. for radio buttons */
     private void processRadio(String key, LinkedList<String> choices) {
         TableRow tr = new TableRow(getActivity());
-        TextView tv = new TextView(getActivity());
         RadioGroup rg = new RadioGroup(getActivity());
 
+        TextView tv = new TextView(getActivity());
         tv.setTextAppearance(getActivity(), R.style.catui_identifier);
-        tv.setGravity(Gravity.END);
+        tv.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
+        tv.setText(key + ": ");
 
         rg.setOrientation(LinearLayout.HORIZONTAL);
         for (int s = 1; s < choices.size(); ++s)
         {
             RadioButton rb = new RadioButton(getActivity());
             rb.setText(choices.get(s));
+            rb.setTextAppearance(getActivity(), R.style.catui_identifier);
             rg.addView(rb);
         }
-
-        tv.setText(key + ": ");
 
         tr.addView(tv);
         tr.addView(rg);
 
         tableLayout.addView(tr);
     }
-
 }
