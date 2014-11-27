@@ -176,6 +176,7 @@ public class BroadcastService extends Service implements
             data.put("TYPE", "control");
             data.put("USER_NAME", UI_Shell.userName);
             data.put("REG_ID", rID);
+            //data.put("MATCH_DATA", Category.getCurrentMatchData());
         } catch (JSONException e) {
             e.printStackTrace();
         }

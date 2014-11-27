@@ -73,14 +73,16 @@ public class GcmIntentService extends IntentService {
                     personRegId = obj.get("REG_ID").toString();
 
 
-                    notification = new Notifications(getApplicationContext());
-                    Notifications.notify(getApplicationContext(),personUsrName, "New match", personUsrName, personRegId);
+                    //IF category match...
 
+                    if (!dataSource.exists(personUsrName)) {
+                        notification = new Notifications(getApplicationContext());
+                        Notifications.notify(getApplicationContext(), personUsrName, "New match", personUsrName, personRegId);
+                        person = dataSource.createPerson(personUsrName, personRegId);
 
-                    person = dataSource.createPerson(personUsrName, personRegId);
-
-                    if (person != null)
-                        messages.add(person);
+                        if (person != null)
+                            messages.add(person);
+                    }
                 }
                 else {
                     //Send the received chat to the chatFragment
