@@ -3,6 +3,7 @@ package com.team1011.project.nearbyapp;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -65,10 +65,7 @@ public class CategoryFragment extends Fragment {
                 )
         );
 
-        ((TextView) rootView.findViewById(R.id.section_label)).setText(
-                "Category: " + id[0]
-                        + "\n" + "Section " + id[1]
-        );
+        //tableLayout.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
         setCategory(id[0]);
 
@@ -77,18 +74,19 @@ public class CategoryFragment extends Fragment {
         {
             // "match creation" section
             case 0:
-                Iterator it = mCategory.getElements().entrySet().iterator();
-                while (it.hasNext()) {
-                    Map.Entry<String, LinkedList<String>> pairs = (Map.Entry<String, LinkedList<String>>) it.next();
+                Map<String,LinkedList<String>> elements = mCategory.getElements();
 
-                    String typeOfElement = pairs.getValue().getFirst();
+                for (String key : mCategory.getFields())
+                {
+                    LinkedList<String> values = elements.get(key);
+                    String typeOfElement = values.element();
 
                     if (typeOfElement.equals(Category.type.EDITTEXT)) {
-                        processEditText(pairs.getKey());
+                        processEditText(key);
                     } else if (typeOfElement.equals(Category.type.CHOICES)) {
-                        processChoice(pairs.getKey(), pairs.getValue());
+                        processChoice(key, values);
                     } else if (typeOfElement.equals(Category.type.RADIO)) {
-                        processRadio(pairs.getKey(), pairs.getValue());
+                        processRadio(key, values);
                     }
                 }
                 break;
@@ -124,6 +122,7 @@ public class CategoryFragment extends Fragment {
         tv.setTextAppearance(getActivity(), R.style.catui_identifier);
         tv.setGravity(Gravity.END);
         et.setTextAppearance(getActivity(), R.style.catui_identifier);
+        et.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         tv.setText(key + ": ");
 

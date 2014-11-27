@@ -7,19 +7,21 @@ import java.util.Map;
  * Created by Thomas on 2014-11-12.
  */
 public class BuySell extends Category {
-    private String[] fields = {"Item Category", "Buy Or Sell", "Price", "Offset"};
+    private String[] fields = {"Type", "Item Category", "Price", "Offset"};
+    private String[] type = {"Radio", "Buying", "Selling"};
     private String[] itemCat = {"Choices", "Phone", "Tool", "Appliance", "Furniture", "Clothing",
             "Accessory", "Book", "Vehicle", "Electronics", "Sporting", "Toy/Game"};
-    private String[] bos = {"Radio", "Buying", "Selling"};
     private String[] price = {"EditText"};
     private String[] offset = {"EditText"};
 
     public BuySell() {
         Map<String, LinkedList<String>> m = this.getElements();
-        m.put(fields[0], toLinkedList(itemCat));
-        m.put(fields[1], toLinkedList(bos));
+        m.put(fields[0], toLinkedList(type));
+        m.put(fields[1], toLinkedList(itemCat));
         m.put(fields[2], toLinkedList(price));
         m.put(fields[3], toLinkedList(offset));
+
+        setFields(fields);
     }
 
     @Override

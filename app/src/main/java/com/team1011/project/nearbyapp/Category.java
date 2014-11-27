@@ -18,10 +18,14 @@ public abstract class Category {
     }
 
     private Map<String, LinkedList<String>> elements = new HashMap<String, LinkedList<String>>();
-    private String[] fields;
+    private LinkedList<String> fields = new LinkedList<String>();
 
-    public String[] getFields() {
+    public LinkedList<String> getFields() {
         return fields;
+    }
+
+    protected void setFields(String[] newFields) {
+        fields = toLinkedList(newFields);
     }
 
     protected static LinkedList<String> toLinkedList(String[] strings) {
@@ -48,13 +52,14 @@ public abstract class Category {
     }
 
     public String[] mapToString(Map<String, LinkedList<String>> map) {
-        String[] strings = new String[fields.length];
+        String[] strings = new String[fields.size()];
 
-        for (int i = 0; i < fields.length; i++) {
-            strings[i] = fields[i];
+        for (int i = 0; i < fields.size(); i++) {
+            strings[i] = fields.get(i);
             strings[i] += "=";
-            strings[i] += elements.get(fields[i]);
+            strings[i] += elements.get(fields.get(i)).get(1); // second element contains the value
         }
+
         return strings;
     }
 

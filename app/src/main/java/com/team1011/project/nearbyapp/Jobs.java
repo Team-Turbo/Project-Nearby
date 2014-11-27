@@ -7,14 +7,16 @@ import java.util.Map;
  * Created by Thomas on 2014-11-12.
  */
 public class Jobs extends Category {
-    private String[] fields = {"Area", "Offering"};
+    private String[] fields = {"Type", "Area"};
+    private String[] type = {"Radio", "Offering", "Searching"};
     private String[] area = {"Choices", "Technology", "Service", "Business", "Agriculture", "Communication", "Security"};
-    private String[] offering = {"Radio", "Offering", "Searching"};
 
     public Jobs() {
         Map<String, LinkedList<String>> m = this.getElements();
-        m.put(fields[0], toLinkedList(area));
-        m.put(fields[1], toLinkedList(offering));
+        m.put(fields[0], toLinkedList(type));
+        m.put(fields[1], toLinkedList(area));
+
+        setFields(fields);
     }
 
     @Override

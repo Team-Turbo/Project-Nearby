@@ -8,9 +8,9 @@ import java.util.Map;
  */
 public class Dating extends Category {
     private String[] fields = {"Your Gender", "Your Age", "Their Gender", "Their Age Low", "Their Age High"};
-    private String[] yourGender = {"EditText"};
+    private String[] yourGender = {type.RADIO, "Male", "Female"};
     private String[] yourAge = {"EditText"};
-    private String[] theirGender = {"EditText"};
+    private String[] theirGender = {type.RADIO, "Male", "Female"};
     private String[] theirAgeLow = {"EditText"};
     private String[] theirAgeHigh = {"EditText"};
 
@@ -21,6 +21,8 @@ public class Dating extends Category {
         m.put(fields[2], toLinkedList(theirGender));
         m.put(fields[3], toLinkedList(theirAgeLow));
         m.put(fields[4], toLinkedList(theirAgeHigh));
+
+        setFields(fields);
     }
 
     @Override
