@@ -54,14 +54,11 @@ public class CategoryFragment extends Fragment {
         tableLayout  = (TableLayout) rootView.findViewById(R.id.fragment_category_table);
 
         bgLayout.setBackgroundColor(
-                Color.rgb(
-                        255, 105, 180
-                )
+                Color.parseColor("#EBEBEB")
         );
 
         setCategory(id[0]);
 
-        // for the below sections
         switch (id[1])
         {
             // "match creation" section
@@ -80,6 +77,8 @@ public class CategoryFragment extends Fragment {
                     } else if (typeOfElement.equals(Category.type.RADIO)) {
                         processRadio(key, values);
                     }
+
+                    processSeparator();
                 }
                 break;
 
@@ -105,6 +104,25 @@ public class CategoryFragment extends Fragment {
         }
     }
 
+    private void processSeparator() {
+        TableRow tr = new TableRow(getActivity());
+
+        TextView tv = new TextView(getActivity());
+        tv.setTextAppearance(getActivity(), R.style.catui_identifier);
+        tv.setText("");
+        tv.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
+
+        TextView tv2 = new TextView(getActivity());
+        tv2.setTextAppearance(getActivity(), R.style.catui_identifier);
+        tv2.setText("");
+        tv2.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
+
+        tr.addView(tv);
+        tr.addView(tv2);
+
+        tableLayout.addView(tr);
+    }
+
     /* UI elements with no choices */
     private void processEditText(String key) {
         TableRow tr = new TableRow(getActivity());
@@ -116,7 +134,7 @@ public class CategoryFragment extends Fragment {
 
         EditText et = new EditText(getActivity());
         et.setTextAppearance(getActivity(), R.style.catui_edittext_text);
-        et.setBackgroundResource(android.R.drawable.editbox_background);
+        et.setBackgroundResource(android.R.drawable.editbox_background_normal);
         et.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         tr.addView(tv);

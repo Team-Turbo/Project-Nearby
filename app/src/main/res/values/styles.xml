@@ -47,7 +47,7 @@
 
     <style name="catui_identifier">
         <item name="android:textStyle">normal</item>
-        <item name="android:textColor">#ffffffff</item>
+        <item name="android:textColor">#ff373737</item>
         <item name="android:textSize">@dimen/catui_txtSize</item>
     </style>
 
