@@ -16,7 +16,11 @@ import org.apache.http.message.BasicHeader;
 
 import java.io.IOException;
 
-
+/**
+ * This class register's the device wtih GCM and facilitates the sending of messages via GCM
+ *
+ * @author Alex Dellow, Thomas Tallentire
+ */
 public class GCMObject {
 
     GoogleCloudMessaging gcm;
@@ -31,7 +35,10 @@ public class GCMObject {
     }
 
 
-
+    /**
+     *
+     * @param ctx
+     */
     public void registerInBackground(final Context ctx) {
         if(!registrationID.isEmpty()){ return; }
 
@@ -77,6 +84,11 @@ public class GCMObject {
         }.execute();
     }
 
+    /**
+     *
+     * @param data
+     * @param regId
+     */
     public void sendMessage(final String data, final String regId){
         new AsyncTask<Object, Integer, String>(){
 
@@ -117,10 +129,19 @@ public class GCMObject {
         }.execute(null, null, null);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getRegistrationID() {
         return registrationID;
     }
 
+    /**
+     *
+     * @param data
+     * @param regId
+     */
     public void postData(String data, String regId) {
 
 

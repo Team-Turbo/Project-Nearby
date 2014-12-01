@@ -35,6 +35,11 @@ import java.util.List;
 /**
  * This fragment handles chat related UI which includes a list view for messages
  * and a message entry field with send button.
+ * Loads your conversation with the selected person from the database.
+ *
+ * Used a Demo from Android SDK sample code. Modified for this project
+ *
+ * @author Filip
  */
 public class ChatFragment extends Fragment {
 

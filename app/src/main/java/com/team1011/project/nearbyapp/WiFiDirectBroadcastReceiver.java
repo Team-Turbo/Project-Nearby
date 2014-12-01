@@ -15,6 +15,10 @@ package com.team1011.project.nearbyapp;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ *
+ * This class has been modified by Filip Gutica to be a background service that
+ *
  */
 
 import android.app.Activity;

@@ -1,7 +1,7 @@
 package com.team1011.project.nearbyapp;
 
 /**
- * Created by Filip on 2014-11-03.
+ * @author Filip
  */
 public class GCMstatic  {
 

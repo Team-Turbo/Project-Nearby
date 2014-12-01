@@ -19,6 +19,10 @@ import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.PersonBuffer;
 
+/**
+ * Google  + sign in page
+ * @author Filip
+ */
 public class SignInPage extends Activity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         ResultCallback<People.LoadPeopleResult> {

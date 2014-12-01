@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 /**
- * Created by Filip on 2014-11-20.
+ * @author Filip
  */
 public class Notifications {
 

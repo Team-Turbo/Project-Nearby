@@ -17,7 +17,7 @@ import android.widget.TextView;
 import java.io.InputStream;
 
 /**
- * Created by Filip on 2014-10-20.
+ * @author Filip
  */
 public class Profile extends Fragment {
 

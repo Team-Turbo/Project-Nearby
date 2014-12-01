@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.team1011.Database.Chat;
@@ -17,17 +16,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * This class waits for intents from GCM and processes them
+ * Decides if a received message was is a control or a chat messages
+ *
+ * @author Alex Dellow, Thomas Tallentire
+ * @author Filip Gutica, Melvin Loho (Implementation and Integration into project)
+ */
 public class GcmIntentService extends IntentService {
 
 
 
     public static ArrayList<Person> messages = new ArrayList<Person>();
-    public static List<String> chat = new ArrayList<String>();
-
-    private List<Person> values;
-    private ArrayAdapter<Person> adapter;
 
     public PersonDataSource dataSource = new PersonDataSource(this);
     public ChatDataSource chatDataSource = new ChatDataSource(this);
@@ -38,6 +39,14 @@ public class GcmIntentService extends IntentService {
         super("GcmIntentService");
     }
 
+    /**
+     * Created and modified by Melvin and Filip
+     * Processes received intents
+     * Sends chats to the chat UI
+     * sends matches to the notification UI
+     * Adds chats and discovered people to the database
+     * @param intent The received intent from GCM
+     */
     @Override
     protected void onHandleIntent(Intent intent) {
 
@@ -71,9 +80,6 @@ public class GcmIntentService extends IntentService {
                     final String personRegId;
                     personUsrName = obj.get("USER_NAME").toString();
                     personRegId = obj.get("REG_ID").toString();
-
-
-                    //IF category match...
 
                     if (!dataSource.exists(personUsrName)) {
                         notification = new Notifications(getApplicationContext());
