@@ -110,6 +110,11 @@ public class GcmIntentService extends IntentService {
 
                     sendIntent.putExtras(chatBundle);
 
+                    chatDataSource.createChat(chatUsrname, Chat.TYPE_FROM, chatmsg);
+
+                    //Send intent to be received by the chatFragment
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(sendIntent);
+
                     if (!UI_Shell.runnnnnnnin) {
                         notification = new Notifications(getApplicationContext());
                         Notifications.notify(getApplicationContext(), chatUsrname + ": " + chatmsg, "New chat", chatUsrname, regid);
@@ -121,13 +126,6 @@ public class GcmIntentService extends IntentService {
                         if (person != null)
                             messages.add(person);
                     }
-
-                    chatDataSource.createChat(chatUsrname, Chat.TYPE_FROM, chatmsg);
-
-                    //Send intent to be received by the chatFragment
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(sendIntent);
-
-
 
                 }
             } catch (JSONException e) {
